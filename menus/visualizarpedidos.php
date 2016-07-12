@@ -15,6 +15,10 @@
 
     <title>Distriabastos</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.min.css" /> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/template01/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -210,16 +214,24 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- jQuery -->
+    <!-- jQuery 
     <script src="../bootstrap/template01/bower_components/jquery/dist/jquery.min.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
+    < Bootstrap Core JavaScript 
     <script src="../bootstrap/template01/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
+    
+    <Metis Menu Plugin JavaScript -->
     <script src="../bootstrap/template01/bower_components/metisMenu/dist/metisMenu.min.js"></script>
 
-    <!-- Custom Theme JavaScript -->
-    <script src="../bootstrap/template01/dist/js/sb-admin-2.js"></script>
+    < Custom Theme JavaScript 
+    <script src="../bootstrap/template01/dist/js/sb-admin-2.js"></script> 
 </body>
-<!-- InstanceEnd --></html>
+<InstanceEnd --></html>
+
+<script type="text/javascript">
+
+    $( document ).ready(function() {
+            $('#fecha1').datepicker();
+            $('#fecha2').datepicker();
+        });
+</script>
