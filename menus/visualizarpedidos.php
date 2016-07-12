@@ -177,15 +177,32 @@
         <div id="page-wrapper">
             <div class="container-fluid">
                 <div class="row">
-				<!-- InstanceBeginEditable name="EditRegion1" -->
+                <!-- InstanceBeginEditable name="EditRegion1" -->
                     <div class="col-lg-12">
-                      <h1 class="page-header">Contenido General</h1>
+                      <h1 class="page-header">Ver Pedidos</h1>
                     </div>
+                    <form>
+                         <label>Fecha Desde: </label>
+                        <input  type="text" class="form-control input-sm"   name="fechainicial" id="fecha1" style="cursor: hand;width:20%;" required readonly="readonly"> 
+                        <label>Fecha Hasta: </label>
+                        <input  type="text" class="form-control input-sm"   name="fechafinal" id="fecha2" style="cursor: hand;width:20%;" required readonly="readonly">
+                        <label class=" control-label" for="vendedor" >Vendedor : </label>   
+                                    <select class="form-control  input-sm" name="vendedor" required style="width:20%;">
+                                    </select>
+                         <label class=" control-label" for="vendedor" >Cliente : </label>   
+                                    <select class="form-control  input-sm" name="vendedor" required style="width:20%;">
+                                    </select><br>
+                         <input type="submit" />
+                         <button>Cancelar</button>
+
+                     </form>
                     <!-- /.col-lg-12 -->
                     <!-- InstanceEndEditable -->
               </div>
                 <!-- /.row -->
+
             </div>
+
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
