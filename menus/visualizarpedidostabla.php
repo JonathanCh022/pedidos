@@ -1,3 +1,22 @@
+<?php 
+    include '../conexion.php';
+
+  /*  $fechaInicio =date("Y-m-d ", strtotime($_POST['fechainicial'])) ;
+    $fechaFinal =date("Y-m-d ", strtotime($_POST['fechafinal'])) ;
+    $vendedor = $_POST['vendedor'];
+    $cliente = $_POST['cliente']; */
+
+    $fechaInicio ="2016-07-03" ;
+    $fechaFinal ="2016-07-05";
+    $vendedor = "2";
+    $cliente = "javier"; 
+
+    $sqlpedidogeneral = "SELECT pdg_numero , pdg_fecha, pdg_cliente,pdg_estado, pdg_vendedor FROM pedido_general WHERE pdg_cliente = '$cliente' AND pdg_vendedor = '$vendedor' AND pdg_fecha >= '$fechaInicio' AND pdg_fecha <= '$fechaFinal'" ;
+   
+    $resultado=  $mysqli->query($sqlpedidogeneral);
+  
+?>
+
 
 <!doctype html>
 <html><!-- InstanceBegin template="/Templates/template_admin.dwt.php" codeOutsideHTMLIsLocked="false" -->
@@ -14,7 +33,11 @@
     <meta name="author" content="">
 
     <title>Distriabastos</title>
-    
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.min.css" /> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/template01/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -177,15 +200,62 @@
         <div id="page-wrapper">
             <div class="container-fluid">
                 <div class="row">
-				<!-- InstanceBeginEditable name="EditRegion1" -->
+                <!-- InstanceBeginEditable name="EditRegion1" -->
                     <div class="col-lg-12">
-                      <h1 class="page-header">Contenido General</h1>
+                      <h1 class="page-header">Tabla Pedidos Vendedor</h1>
                     </div>
-                    <!-- /.col-lg-12 -->
-                    <!-- InstanceEndEditable -->
+                    <div >
+                        <h4>Pedidos del cliente: <?php echo "$cliente";?> vendedor:<?php echo "$vendedor";?> <br>
+                            desde <?php echo "$fechaInicio";?> hasta   <?php echo "$fechaFinal";?></h4>
+                    </div>
+                    <div class="div3">
+                    <table>
+                        <tr>                    
+                            <td style="height: 10px;">Nro</td>
+                            <td style="height: 10px;">Fecha</td>
+                            <td style="height: 10px;">Cliente</td>
+                            <td style="height: 10px;">Vendedor</td>
+                            <td style="height: 10px;">Valor</td>
+                            <td style="height: 10px;">Estado</td>
+                        </tr>
+                        <?PHP     
+                            if (mysqli_num_rows($resultado) > 0) {  
+                             while($row = mysqli_fetch_assoc($resultado)) {
+                            echo "<tr>";
+                            echo "<td >";
+                            echo $row['pdg_numero']; 
+                            echo "</td>";
+                            echo "<td >";
+                            echo $row['pdg_fecha']; 
+                            echo "</td>";
+                            echo "<td >";
+                            echo $row['pdg_cliente'];  
+                            echo "</td>";
+                            echo "<td >";
+                            echo $row['pdg_vendedor']; 
+                            echo "</td>";
+                            echo "<td >"; 
+                            echo "12000";
+                            echo "</td>";
+                            echo "<td >"; 
+                            echo $row['pdg_vendedor'];  
+                            echo "</td>";
+                            echo "</tr>";   
+
+                            }
+                            } else {
+                                echo "NO HAY USUARIOS REGISTRADOS";//login no exitoso
+                            }                
+                           
+                            
+                        ?> 
+                    </table>
+                </div>
               </div>
                 <!-- /.row -->
+
             </div>
+
             <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
@@ -193,18 +263,16 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- jQuery -->
+    <!-- jQuery 
     <script src="../bootstrap/template01/bower_components/jquery/dist/jquery.min.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
+    < Bootstrap Core JavaScript 
     <script src="../bootstrap/template01/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
+    
+    <Metis Menu Plugin JavaScript -->
     <script src="../bootstrap/template01/bower_components/metisMenu/dist/metisMenu.min.js"></script>
 
-    <!-- Custom Theme JavaScript -->
-    <script src="../bootstrap/template01/dist/js/sb-admin-2.js"></script>
+    < Custom Theme JavaScript 
+    <script src="../bootstrap/template01/dist/js/sb-admin-2.js"></script> 
 </body>
-<!-- InstanceEnd --></html>
-
-
+<InstanceEnd --></html>

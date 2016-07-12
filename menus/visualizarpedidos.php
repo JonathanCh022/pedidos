@@ -1,22 +1,22 @@
-<?php
-    include '../conexion.php';
-    $sql="SELECT ven_codigo,ven_nombre FROM vendedores";    
-    $result = $mysqli->query($sql);
-    $result->data_seek(0);
-    while ($fila = $result->fetch_assoc()) {
-        $ven_codigo[]=$fila['ven_codigo'];
-        $ven_nombre[]=$fila['ven_nombre'];
-    }
-    $sql="SELECT cli_cedula,cli_nombre FROM clientes";    
-    $result = $mysqli->query($sql);
-    $result->data_seek(0);
-    while ($fila = $result->fetch_assoc()) {
-        $cli_cedula[]=$fila['cli_cedula'];
-        $cli_nombre[]=$fila['cli_nombre'];
-    }
+<?php 
+include '../conexion.php';
+$sqlvend = "SELECT ven_codigo , ven_nombre  FROM vendedores ";
+$res = $mysqli->query($sqlvend);
+while ($fila = $res->fetch_assoc()) {
+        $arreglo[]=$fila['ven_codigo'];   
+        $arreglo2[]=$fila['ven_nombre'];  
+              
+}
 
+$sqlcli = "SELECT cli_cedula , cli_nombre, ven_codigo  FROM clientes ";
+$res1 = $mysqli->query($sqlcli);
+while ($row = $res1->fetch_assoc()) {
+        $arreglo3[]=$row['cli_nombre'];   
+        $arreglo4[]=$row['ven_codigo'];            
+}
 
 ?>
+
 <!doctype html>
 <html><!-- InstanceBegin template="/Templates/template_admin.dwt.php" codeOutsideHTMLIsLocked="false" -->
 <head>
@@ -55,11 +55,12 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
 </head>
 
 
 
-<body onload="listar();">
+<body onload="vendedor(); clt(); ">
 
 <div id="wrapper">
 
@@ -202,16 +203,16 @@
                     <div class="col-lg-12">
                       <h1 class="page-header">Ver Pedidos</h1>
                     </div>
-                    <form name="form1" id="form1">
+                    <form name="form1">
                          <label>Fecha Desde: </label>
                         <input  type="text" class="form-control input-sm"   name="fechainicial" id="fecha1" style="cursor: hand;width:20%;" required readonly="readonly"> 
                         <label>Fecha Hasta: </label>
                         <input  type="text" class="form-control input-sm"   name="fechafinal" id="fecha2" style="cursor: hand;width:20%;" required readonly="readonly">
                         <label class=" control-label" for="vendedor" >Vendedor : </label>   
-                                    <select class="form-control  input-sm" name="vendedor" id="vendedor" required style="width:20%;">
+                                    <select class="form-control  input-sm" name="vendedor"  onchange="clt()" required style="width:20%;">
                                     </select>
                          <label class=" control-label" for="vendedor" >Cliente : </label>   
-                                    <select class="form-control  input-sm" name="vendedor" required style="width:20%;">
+                                    <select class="form-control  input-sm" name="cliente" required style="width:20%;">
                                     </select><br>
                          <input type="submit" />
                          <button>Cancelar</button>
@@ -233,42 +234,71 @@
 
     <!-- jQuery 
     <script src="../bootstrap/template01/bower_components/jquery/dist/jquery.min.js"></script>
+
     < Bootstrap Core JavaScript 
     <script src="../bootstrap/template01/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     
     <Metis Menu Plugin JavaScript -->
     <script src="../bootstrap/template01/bower_components/metisMenu/dist/metisMenu.min.js"></script>
 
-    < Custom Theme JavaScript 
+    <!-- Custom Theme JavaScript -->
     <script src="../bootstrap/template01/dist/js/sb-admin-2.js"></script> 
 </body>
 <InstanceEnd --></html>
 
 <script type="text/javascript">
 
+    function vendedor()
+    {           
+            var a = new Array();
+            var cont = 0;
+            <?php
+            for ($i = 0, $total = count($arreglo); $i < $total; $i ++) {               
+                echo "\na[$i] = '$arreglo2[$i]';";
+            }
+            ?>
+            form1.vendedor.length=0;
+            for (var i = 0; i < a.length; i++) {            
+                opcion0 = new Option(a[i],i+1);
+                document.forms.form1.vendedor.options[cont]=opcion0;
+                cont++;         
+            }
+    }
 
-function listar(){
-         var a = new Array();
-          var cont =0;
-        <?php
-        for ($i = 0, $total = count($ven_nombre); $i < $total; $i ++) {               
-            echo "\na[$i] = '$ven_nombre[$i]';";
-         }
-         ?>
-        form1.vendedor.length=0;
-        for (var i = 0; i < a.length; i++) {            
-             opcion0 = new Option(a[i],i+1);
-             document.forms.form1.vendedor.options[cont]=opcion0;
-             cont++;         
-         }
-}
+  function clt() {
+            var index = document.forms.form1.vendedor.selectedIndex ;
+            window.alert(index);
+            index = index + 1 ;
+            window.alert(index);
+            var x = new Array();
+            var y = new Array();
+            var con=0;
+            <?php
+            for ($j = 0, $tot = count($arreglo3); $j < $tot; $j ++) {
+                echo "\nx[$j] = '$arreglo3[$j]';"; 
+                echo "\ny[$j] = '$arreglo4[$j]';";
+
+            }
+            ?>
+            form1.cliente.length=0;
+           
+            for (var j = 0; j < x.length; j++) {
+            
+            
+            if (y[j]==index) {
+                opcion0=new Option(x[j],j+1);
+                document.forms.form1.cliente.options[con]=opcion0;
+                con++;
+            }
+            }
+    } 
 
 
 
+    $( document ).ready(function() {
+            $('#fecha1').datepicker();
+            $('#fecha2').datepicker();
+        });
 
-
- $( document ).ready(function() {
-         $('#fecha1').datepicker();
-         $('#fecha2').datepicker();
-     });
+  
 </script>
