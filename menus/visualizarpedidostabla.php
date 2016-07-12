@@ -1,16 +1,21 @@
 <?php 
     include '../conexion.php';
 
-  /*  $fechaInicio =date("Y-m-d ", strtotime($_POST['fechainicial'])) ;
+   $fechaInicio =date("Y-m-d ", strtotime($_POST['fechainicial'])) ;
     $fechaFinal =date("Y-m-d ", strtotime($_POST['fechafinal'])) ;
     $vendedor = $_POST['vendedor'];
-    $cliente = $_POST['cliente']; */
+    $cliente = $_POST['cliente'];
 
+    echo $fechaInicio;
+    echo $fechaFinal;
+    echo $vendedor;
+    echo $cliente;
+/*  
     $fechaInicio ="2016-07-03" ;
     $fechaFinal ="2016-07-05";
-    $vendedor = "2";
-    $cliente = "javier"; 
-
+    $vendedor = "1";
+    $cliente = "1"; 
+ */
     $sqlpedidogeneral = "SELECT pdg_numero , pdg_fecha, pdg_cliente,pdg_estado, pdg_vendedor FROM pedido_general WHERE pdg_cliente = '$cliente' AND pdg_vendedor = '$vendedor' AND pdg_fecha >= '$fechaInicio' AND pdg_fecha <= '$fechaFinal'" ;
    
     $resultado=  $mysqli->query($sqlpedidogeneral);
@@ -223,7 +228,7 @@
                              while($row = mysqli_fetch_assoc($resultado)) {
                             echo "<tr>";
                             echo "<td >";
-                            echo $row['pdg_numero']; 
+                            echo '<a href="visualizarpedidosarticulo.php?id='.$row['pdg_numero'].'">'.$row['pdg_numero'].'</a>';
                             echo "</td>";
                             echo "<td >";
                             echo $row['pdg_fecha']; 
