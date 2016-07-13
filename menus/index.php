@@ -1,3 +1,8 @@
+<?php
+    session_start();
+
+?>
+
 
 <!doctype html>
 <html><!-- InstanceBegin template="/Templates/template_admin.dwt.php" codeOutsideHTMLIsLocked="false" -->

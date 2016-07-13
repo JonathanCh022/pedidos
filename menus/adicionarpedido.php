@@ -1,19 +1,15 @@
 <?php 
-include '../conexion.php';
-$sqlvend = "SELECT ven_codigo , ven_nombre  FROM vendedores ";
-$res = $mysqli->query($sqlvend);
-while ($fila = $res->fetch_assoc()) {
-        $arreglo[]=$fila['ven_codigo'];   
-        $arreglo2[]=$fila['ven_nombre'];  
-              
-}
 
-$sqlcli = "SELECT cli_cedula , cli_nombre, ven_codigo  FROM clientes ";
+session_start();
+echo $_SESSION['ven_codigo'];
+include '../conexion.php';
+
+$sqlcli = "SELECT cli_cedula , cli_nombre, ven_codigo FROM clientes WHERE ven_codigo = '".$_SESSION['ven_codigo']."'";
 $res1 = $mysqli->query($sqlcli);
 while ($row = $res1->fetch_assoc()) {
-        $arreglo3[]=$row['cli_nombre'];   
-        $arreglo4[]=$row['ven_codigo'];
-         $arreglo5[]=$row['cli_cedula'];            
+        $arreglo[]=$row['cli_nombre']; 
+        echo $row['cli_nombre'];
+        $arreglo2[]=$row['cli_cedula'];            
 }
 
 ?>
@@ -61,7 +57,7 @@ while ($row = $res1->fetch_assoc()) {
 
 
 
-<body onload="vendedor(); clt(); ">
+<body onload="clt(); ">
 
 <div id="wrapper">
 
@@ -204,14 +200,17 @@ while ($row = $res1->fetch_assoc()) {
                     <div class="col-lg-12">
                       <h1 class="page-header">Adicionar Pedidos</h1>
                     </div>
-                    <form name="form1" method="post" action="visualizarpedidostabla.php">
+                    <form name="form1" method="post" action="adicionararticulo.php">
                          <label>Fecha : </label>
                         <input  type="text" class="form-control input-sm"   name="fecha" id="fecha" style="cursor: hand;width:20%;" required > 
                         <label class=" control-label" for="vendedor" >Vendedor : </label>   
-                                    <input class="form-control  input-sm" name="vendedor" required style="width:20%;" disabled></input>
+                                    <input class="form-control  input-sm" name="vendedor" value="<?php echo $_SESSION['ven_nombre']; ?>" required style="width:20%;" disabled></input>
                          <label class=" control-label" for="vendedor" >Cliente : </label>   
                                     <select class="form-control  input-sm" name="cliente" required style="width:20%;">
-                                    </select><br>
+                                    </select>
+                        <label>Numero Pedido : </label>
+                        <input  type="text" class="form-control input-sm"   name="fecha" id="fecha" style="width:20%;" required > 
+                        <br>
                          <input type="submit" value="Continuar" style="color: black;" />
                         <a href="../menus" style="color: black;"> <button type="button">Cancelar</button></a>
 
@@ -246,55 +245,38 @@ while ($row = $res1->fetch_assoc()) {
 
 <script type="text/javascript">
 
-    function vendedor()
+    function clt()
     {           
             var a = new Array();
             var b = new Array();
             var cont = 0;
             <?php
             for ($i = 0, $total = count($arreglo); $i < $total; $i ++) {               
-                echo "\na[$i] = '$arreglo2[$i]';";
-                echo "\nb[$i] = '$arreglo[$i]';";
-            }
-            ?>
-            form1.vendedor.length=0;
-            for (var i = 0; i < a.length; i++) {            
-                opcion0 = new Option(a[i],b[i]);
-                document.forms.form1.vendedor.options[cont]=opcion0;
-                cont++;         
-            }
-    }
-
-  function clt() {
-            var index = document.forms.form1.vendedor.selectedIndex ;
-          
-            index = index + 1 ;
-
-            var x = new Array();
-            var y = new Array();
-            var z = new Array();
-            var con=0;
-            <?php
-            for ($j = 0, $tot = count($arreglo3); $j < $tot; $j ++) {
-                echo "\nx[$j] = '$arreglo3[$j]';"; 
-                echo "\ny[$j] = '$arreglo4[$j]';";
-                echo "\nz[$j] = '$arreglo5[$j]';";
-
+                echo "\na[$i] = '$arreglo[$i]';";
+                echo "\nb[$i] = '$arreglo2[$i]';";
             }
             ?>
             form1.cliente.length=0;
-           
-            for (var j = 0; j < x.length; j++) {
-            
-            
-            if (y[j]==index) {
-                opcion0=new Option(x[j],z[j]);
-                document.forms.form1.cliente.options[con]=opcion0;
-                con++;
+            for (var i = 0; i < a.length; i++) {            
+                opcion0 = new Option(a[i],b[i]);
+                document.forms.form1.cliente.options[cont]=opcion0;
+                cont++;         
             }
-            }
-    } 
+    }
+// a continuacion creamos la fecha en la variable date
+	var date = new Date();
+	// Luego le sacamos los datos año, dia, mes 
+	// y numero de dia de la variable date
+	var año = date.getFullYear();
+	var mes = date.getMonth();
+	var ndia = date.getDate();
 
+	//Damos a los meses el valor en número
+	mes+=1;
+
+	var f2 = mes + "/"+ ndia + "/" + año;
+	//juntamos todos los datos en una variable
+	document.getElementById('fecha').value = f2;
 
 
     $( document ).ready(function() {
