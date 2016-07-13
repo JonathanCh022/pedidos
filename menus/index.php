@@ -99,7 +99,7 @@
                                     <a href="visualizarpedidos.php">Visualizar Pedidos</a>
                                 </li>
                                 <li>
-                                    <a href="#">Aprovar/Desaprovar Pedidos</a>
+                                    <a href="visualizarpedidoap_dsp.php">Aprovar/Desaprovar Pedidos</a>
                                 </li>
                                 
                                  <li>

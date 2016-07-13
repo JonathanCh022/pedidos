@@ -6,19 +6,39 @@
     $vendedor = $_POST['vendedor'];
     $cliente = $_POST['cliente'];
 
-    echo $fechaInicio;
-    echo $fechaFinal;
-    echo $vendedor;
-    echo $cliente;
+    $sqlclt = "SELECT cli_nombre FROM  clientes WHERE cli_cedula = '$cliente'";
+    $sqlvnd = "SELECT ven_nombre FROM  vendedores WHERE ven_codigo = '$vendedor'";
+
+    $rst1 = $mysqli->query($sqlclt);
+    while ($fila = $rst1->fetch_assoc()) {       
+        $nombre_cli=$fila['cli_nombre'];                
+    }
+    $rst2 = $mysqli->query($sqlvnd);
+    while ($fila = $rst2->fetch_assoc()) {       
+        $nombre_ven=$fila['ven_nombre'];                
+    }
 /*  
+    
+
     $fechaInicio ="2016-07-03" ;
     $fechaFinal ="2016-07-05";
     $vendedor = "1";
     $cliente = "1"; 
  */
     $sqlpedidogeneral = "SELECT pdg_numero , pdg_fecha, pdg_cliente,pdg_estado, pdg_vendedor,pdg_estado FROM pedido_general WHERE pdg_cliente = '$cliente' AND pdg_vendedor = '$vendedor' AND pdg_fecha >= '$fechaInicio' AND pdg_fecha <= '$fechaFinal'" ;
-   
+ 
     $resultado=  $mysqli->query($sqlpedidogeneral);
+    $rest=  $mysqli->query($sqlpedidogeneral);
+      while ($fila = $rest->fetch_assoc()) {       
+        $estado=$fila['pdg_estado'];                
+    }
+
+    $estados = [
+    0 => "Reportado",
+    1 => "Aprobado",
+    2 => "Rechazado",
+    3 => "Pendiente"
+    ];    
   
 ?>
 
@@ -61,6 +81,40 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <style type="text/css">
+        .clwhite{
+            color: white;
+        }
+
+        .trtit{
+            background-color:#1a75ff;
+        }
+
+        table {
+            overflow:hidden;
+            border:1px solid #d3d3d3;
+            background:#fefefe;
+            width:70%;
+            margin:5% auto 0;
+            -moz-border-radius:5px; /* FF1+ */
+            -webkit-border-radius:5px; /* Saf3-4 */
+            border-radius:5px;
+            -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+            -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+        }
+        th {
+            padding:18px 28px 18px; 
+            text-align:center; 
+            padding-top:22px;            
+            border-top:1px solid #e0e0e0;  
+            border-right:1px solid #e0e0e0;          
+        }
+        td {padding:8px 28px 8px; 
+            text-align:center; 
+            border-top:1px solid #e0e0e0; 
+            border-right:1px solid #e0e0e0;}
+    </style>
 
 </head>
 
@@ -127,7 +181,7 @@
                                     <a href="visualizarpedidos.php">Visualizar Pedidos</a>
                                 </li>
                                 <li>
-                                    <a href="#">Aprovar/Desaprovar Pedidos</a>
+                                    <a href="aprobar_desaprobar.php">Aprobar/Desaprobar Pedidos</a>
                                 </li>
                                 
                                  <li>
@@ -209,19 +263,19 @@
                     <div class="col-lg-12">
                       <h1 class="page-header">Tabla Pedidos Vendedor</h1>
                     </div>
-                    <div >
-                        <h4>Pedidos del cliente: <?php echo "$cliente";?> vendedor:<?php echo "$vendedor";?> <br>
-                            desde <?php echo "$fechaInicio";?> hasta   <?php echo "$fechaFinal";?></h4>
+                    <div class="panel">
+                        <h4>Informacion Pedidos <br><br> Cliente: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo "$nombre_cli ";?> <br> Vendedor:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo " $nombre_ven ";?> 
+                            <br>Desde:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo " $fechaInicio ";?> <br>Hasta: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo " $fechaFinal ";?></h4>
                     </div>
                     <div class="div3">
                     <table>
-                        <tr>                    
-                            <td style="height: 10px;">Nro</td>
-                            <td style="height: 10px;">Fecha</td>
-                            <td style="height: 10px;">Cliente</td>
-                            <td style="height: 10px;">Vendedor</td>
-                            <td style="height: 10px;">Valor</td>
-                            <td style="height: 10px;">Estado</td>
+                        <tr class="trtit">                    
+                            <th style="height: 10px;" class="clwhite">Nro</th>
+                            <th style="height: 10px;" class="clwhite">Fecha</th>
+                            <th style="height: 10px;" class="clwhite">Cliente</th>
+                            <th style="height: 10px;" class="clwhite">Vendedor</th>
+                            <th style="height: 10px;" class="clwhite">Valor</th>
+                            <th style="height: 10px;" class="clwhite">Estado</th>
                         </tr>
                         <?PHP    
                         $valor =0; 
@@ -235,10 +289,10 @@
                             echo $row['pdg_fecha']; 
                             echo "</td>";
                             echo "<td >";
-                            echo $row['pdg_cliente'];  
+                            echo $nombre_cli;  
                             echo "</td>";
                             echo "<td >";
-                            echo $row['pdg_vendedor']; 
+                            echo $nombre_ven; 
                             echo "</td>";
                             echo "<td >";
                             $sqlarticulo="SELECT * FROM pedido_articulos WHERE pda_numero = '".$row['pdg_numero']."'";
@@ -260,7 +314,7 @@
                               echo $valor;
                             echo "</td>";
                             echo "<td >"; 
-                            echo $row['pdg_estado'];  
+                            echo $estados[$estado];  
                             echo "</td>";
                             echo "</tr>";   
 
@@ -294,7 +348,7 @@
     <Metis Menu Plugin JavaScript -->
     <script src="../bootstrap/template01/bower_components/metisMenu/dist/metisMenu.min.js"></script>
 
-    < Custom Theme JavaScript 
+    <!-- Custom Theme JavaScript -->
     <script src="../bootstrap/template01/dist/js/sb-admin-2.js"></script> 
 </body>
 <InstanceEnd --></html>

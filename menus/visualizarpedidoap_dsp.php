@@ -204,7 +204,7 @@ while ($row = $res1->fetch_assoc()) {
                     <div class="col-lg-12">
                       <h1 class="page-header">Ver Pedidos</h1>
                     </div>
-                    <form name="form1" method="post" action="visualizarpedidostabla.php">
+                    <form name="form1" method="post" action="aprobar_desaprobar.php">
                          <label>Fecha Desde: </label>
                         <input  type="text" class="form-control input-sm"   name="fechainicial" id="fecha1" style="cursor: hand;width:20%;" required > 
                         <label>Fecha Hasta: </label>
