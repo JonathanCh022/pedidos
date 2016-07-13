@@ -103,7 +103,7 @@
                                 </li>
                                 
                                  <li>
-                                    <a href="#">Adicionar Pedido</a>
+                                    <a href="adicionarpedido.php">Adicionar Pedido</a>
                                     <!-- /.nav-third-level -->
                                 </li>
                             </ul>

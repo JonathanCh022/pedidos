@@ -1,24 +1,22 @@
 <?php 
-  $id= $_GET["id"];
-    include '../conexion.php';
+include '../conexion.php';
+$sqlvend = "SELECT ven_codigo , ven_nombre  FROM vendedores ";
+$res = $mysqli->query($sqlvend);
+while ($fila = $res->fetch_assoc()) {
+        $arreglo[]=$fila['ven_codigo'];   
+        $arreglo2[]=$fila['ven_nombre'];  
+              
+}
 
-  /*  $fechaInicio =date("Y-m-d ", strtotime($_POST['fechainicial'])) ;
-    $fechaFinal =date("Y-m-d ", strtotime($_POST['fechafinal'])) ;
-    $vendedor = $_POST['vendedor'];
-    $cliente = $_POST['cliente']; */
+$sqlcli = "SELECT cli_cedula , cli_nombre, ven_codigo  FROM clientes ";
+$res1 = $mysqli->query($sqlcli);
+while ($row = $res1->fetch_assoc()) {
+        $arreglo3[]=$row['cli_nombre'];   
+        $arreglo4[]=$row['ven_codigo'];
+         $arreglo5[]=$row['cli_cedula'];            
+}
 
-    $fechaInicio ="2016-07-03" ;
-    $fechaFinal ="2016-07-05";
-    $vendedor = "2";
-    $cliente = "javier"; 
-
-    $sqlpedidoarticulo = "SELECT * FROM pedido_articulos WHERE   pda_numero = '$id' ";
-   
-    $resultado =  $mysqli->query($sqlpedidoarticulo);
-  
- 
 ?>
-
 
 <!doctype html>
 <html><!-- InstanceBegin template="/Templates/template_admin.dwt.php" codeOutsideHTMLIsLocked="false" -->
@@ -63,7 +61,7 @@
 
 
 
-<body>
+<body onload="vendedor(); clt(); ">
 
 <div id="wrapper">
 
@@ -204,61 +202,22 @@
                 <div class="row">
                 <!-- InstanceBeginEditable name="EditRegion1" -->
                     <div class="col-lg-12">
-                      <h1 class="page-header">Tabla Articulos Pedidos</h1>
+                      <h1 class="page-header">Adicionar Pedidos</h1>
                     </div>
-                    <div >
-                        <h4>Arcituclos del Pedido: <?php echo "$id";?></h4>
-                    </div>
-                    <div class="div3">
-                    <table>
-                        <tr>                    
-                            <td style="height: 10px;">Articulo</td>
-                            <td style="height: 10px;">Cantidad</td>
-                            <td style="height: 10px;">Valor</td>
-                            <td style="height: 10px;">Descuento</td>
-                            <td style="height: 10px;">Neto</td>
-                            <td style="height: 10px;">Estado</td>
-                        </tr>
-                        <?PHP     
-                            if (mysqli_num_rows($resultado) > 0) {  
-                             while($row = mysqli_fetch_assoc($resultado)) {
-                            echo "<tr>";
-                            echo "<td >";
-                            echo $row['pda_referencia']; 
-                            
-                            echo "</td>";
-                            echo "<td >";
-                            echo $row['pda_cantidad_ped']; 
-                            echo "</td>";
-                            echo "<td >";
-                            $sqlinventario="SELECT * FROM inventario WHERE inv_referencia = '".$row['pda_referencia']."'";
-                             $resultado2 =  $mysqli->query($sqlinventario);
-                              while($row2 = mysqli_fetch_assoc($resultado2)) {
-                                $precio = $row2['inv_precio_vta'];
-                                echo $precio;
+                    <form name="form1" method="post" action="visualizarpedidostabla.php">
+                         <label>Fecha : </label>
+                        <input  type="text" class="form-control input-sm"   name="fecha" id="fecha" style="cursor: hand;width:20%;" required > 
+                        <label class=" control-label" for="vendedor" >Vendedor : </label>   
+                                    <input class="form-control  input-sm" name="vendedor" required style="width:20%;" disabled></input>
+                         <label class=" control-label" for="vendedor" >Cliente : </label>   
+                                    <select class="form-control  input-sm" name="cliente" required style="width:20%;">
+                                    </select><br>
+                         <input type="submit" value="Continuar" style="color: black;" />
+                        <a href="../menus" style="color: black;"> <button type="button">Cancelar</button></a>
 
-                              }
-                            echo "</td>";
-                            echo "<td >";
-                            echo $row['pda_descuento']; 
-                            echo "</td>";
-                            echo "<td >"; 
-                            echo  $precio*$row['pda_cantidad_ped'];
-                            echo "</td>";   
-                            echo "<td >"; 
-                            echo "estado"; 
-                            echo "</td>";
-                            echo "</tr>";   
-
-                            }
-                            } else {
-                                echo "NO HAY USUARIOS REGISTRADOS";//login no exitoso
-                            }                
-                           
-                            
-                        ?> 
-                    </table>
-                </div>
+                     </form>
+                    <!-- /.col-lg-12 -->
+                    <!-- InstanceEndEditable -->
               </div>
                 <!-- /.row -->
 
@@ -280,7 +239,67 @@
     <Metis Menu Plugin JavaScript -->
     <script src="../bootstrap/template01/bower_components/metisMenu/dist/metisMenu.min.js"></script>
 
-    < Custom Theme JavaScript 
+    <!-- Custom Theme JavaScript -->
     <script src="../bootstrap/template01/dist/js/sb-admin-2.js"></script> 
 </body>
 <InstanceEnd --></html>
+
+<script type="text/javascript">
+
+    function vendedor()
+    {           
+            var a = new Array();
+            var b = new Array();
+            var cont = 0;
+            <?php
+            for ($i = 0, $total = count($arreglo); $i < $total; $i ++) {               
+                echo "\na[$i] = '$arreglo2[$i]';";
+                echo "\nb[$i] = '$arreglo[$i]';";
+            }
+            ?>
+            form1.vendedor.length=0;
+            for (var i = 0; i < a.length; i++) {            
+                opcion0 = new Option(a[i],b[i]);
+                document.forms.form1.vendedor.options[cont]=opcion0;
+                cont++;         
+            }
+    }
+
+  function clt() {
+            var index = document.forms.form1.vendedor.selectedIndex ;
+          
+            index = index + 1 ;
+
+            var x = new Array();
+            var y = new Array();
+            var z = new Array();
+            var con=0;
+            <?php
+            for ($j = 0, $tot = count($arreglo3); $j < $tot; $j ++) {
+                echo "\nx[$j] = '$arreglo3[$j]';"; 
+                echo "\ny[$j] = '$arreglo4[$j]';";
+                echo "\nz[$j] = '$arreglo5[$j]';";
+
+            }
+            ?>
+            form1.cliente.length=0;
+           
+            for (var j = 0; j < x.length; j++) {
+            
+            
+            if (y[j]==index) {
+                opcion0=new Option(x[j],z[j]);
+                document.forms.form1.cliente.options[con]=opcion0;
+                con++;
+            }
+            }
+    } 
+
+
+
+    $( document ).ready(function() {
+            $('#fecha').datepicker();
+        });
+
+  
+</script>

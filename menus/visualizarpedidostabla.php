@@ -16,7 +16,7 @@
     $vendedor = "1";
     $cliente = "1"; 
  */
-    $sqlpedidogeneral = "SELECT pdg_numero , pdg_fecha, pdg_cliente,pdg_estado, pdg_vendedor FROM pedido_general WHERE pdg_cliente = '$cliente' AND pdg_vendedor = '$vendedor' AND pdg_fecha >= '$fechaInicio' AND pdg_fecha <= '$fechaFinal'" ;
+    $sqlpedidogeneral = "SELECT pdg_numero , pdg_fecha, pdg_cliente,pdg_estado, pdg_vendedor,pdg_estado FROM pedido_general WHERE pdg_cliente = '$cliente' AND pdg_vendedor = '$vendedor' AND pdg_fecha >= '$fechaInicio' AND pdg_fecha <= '$fechaFinal'" ;
    
     $resultado=  $mysqli->query($sqlpedidogeneral);
   
@@ -223,7 +223,8 @@
                             <td style="height: 10px;">Valor</td>
                             <td style="height: 10px;">Estado</td>
                         </tr>
-                        <?PHP     
+                        <?PHP    
+                        $valor =0; 
                             if (mysqli_num_rows($resultado) > 0) {  
                              while($row = mysqli_fetch_assoc($resultado)) {
                             echo "<tr>";
@@ -239,11 +240,27 @@
                             echo "<td >";
                             echo $row['pdg_vendedor']; 
                             echo "</td>";
-                            echo "<td >"; 
-                            echo "12000";
+                            echo "<td >";
+                            $sqlarticulo="SELECT * FROM pedido_articulos WHERE pda_numero = '".$row['pdg_numero']."'";
+                             $resultado2 =  $mysqli->query($sqlarticulo);
+                              while($row2 = mysqli_fetch_assoc($resultado2)) {
+                                    $cantidad = $row2['pda_cantidad_ped'];
+                                    $ref = $row2['pda_referencia'];
+
+                                    $sqlprecio="SELECT * FROM inventario WHERE inv_referencia = '$ref'";
+                                    $resultado3 =  $mysqli->query($sqlprecio);
+                                    while($row3 = mysqli_fetch_assoc($resultado3)) {
+                                    $precio = $row3['inv_precio_vta'];
+                                    $valor = $valor + $precio*$cantidad;
+
+                                  }
+
+
+                              }
+                              echo $valor;
                             echo "</td>";
                             echo "<td >"; 
-                            echo $row['pdg_vendedor'];  
+                            echo $row['pdg_estado'];  
                             echo "</td>";
                             echo "</tr>";   
 
