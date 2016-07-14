@@ -1,8 +1,7 @@
 <?php 
-    
-    $id= $_GET["id"];
+  $id= $_GET["id"];
     include '../conexion.php';
-    session_start();
+
   /*  $fechaInicio =date("Y-m-d ", strtotime($_POST['fechainicial'])) ;
     $fechaFinal =date("Y-m-d ", strtotime($_POST['fechafinal'])) ;
     $vendedor = $_POST['vendedor'];
@@ -16,8 +15,17 @@
     $sqlpedidoarticulo = "SELECT * FROM pedido_articulos WHERE   pda_numero = '$id' ";
    
     $resultado =  $mysqli->query($sqlpedidoarticulo);
+    $rest=  $mysqli->query($sqlpedidoarticulo);
+      while ($fila = $rest->fetch_assoc()) {       
+        $estado=$fila['pda_estado'];                
+    }
   
- 
+    $estados = [
+     "Reportado",
+     "Aprobado",
+     "Rechazado",
+     "Pendiente"
+    ];    
 ?>
 
 
@@ -98,7 +106,7 @@
 
 
 
-<body>
+<body onload="est();">
 
 <div id="wrapper">
 
@@ -243,7 +251,7 @@
                     </div>
                     <div class="panel">
                         <h4>Articulos del Pedido N° <?php echo "$id";?></h4>
-                         <button type="button" name="salir"> <a href="visualizarpedidostabla.php">Regresar</a></button>
+                         <button type="button" name="salir"> <a href="aprobar_desaprobar.php">Regresar</a></button>
                     </div>
                     <div class="div3">
                     <table>
@@ -258,6 +266,7 @@
                         <?PHP     
                             if (mysqli_num_rows($resultado) > 0) {  
                              while($row = mysqli_fetch_assoc($resultado)) {
+                            $num = $row['pda_referencia']; 
                             echo "<tr>";
                             echo "<td >";
                             echo $row['pda_referencia']; 
@@ -281,8 +290,13 @@
                             echo "<td >"; 
                             echo  $precio*$row['pda_cantidad_ped'];
                             echo "</td>";   
-                            echo "<td >"; 
-                            echo $row['pda_estado'];
+                            echo "<td >";?>
+                            <form name="form2" method="post" action="update_estado.php">
+                            <input type="text" name="nmo_ped" hidden value="<?php echo $num;?>" ></input>
+                            <select id="estado" class="form-control  input-sm" name="estado" onchange="this.form.submit()" style="width:95%;">
+                            </select>
+                            </form>
+                            <?php
                             echo "</td>";
                             echo "</tr>";   
 
@@ -320,3 +334,31 @@
     <script src="../bootstrap/template01/dist/js/sb-admin-2.js"></script> 
 </body>
 <InstanceEnd --></html>
+
+
+<script type="text/javascript">
+    
+ function est()
+    {           
+            var a = new Array();
+            var std = 0;                       
+            var cont = 0;
+            <?php
+            for ($i = 0, $total = count($estados); $i < $total; $i ++) {               
+                echo "\na[$i] = '$estados[$i]';";              
+            }
+            echo "\nstd = $estado;";
+            ?>
+            form2.estado.length=0;
+            for (var i = 0; i < a.length; i++) {            
+                opcion1 = new Option(a[i],i);
+                document.forms.form2.estado.options[cont]=opcion1;              
+                cont++;         
+            }
+            document.getElementById("estado").selectedIndex=std;
+    }
+
+$("#estado").change(function(){
+    confirm('Esta seguro de realizar esta accion?');
+});
+</script>

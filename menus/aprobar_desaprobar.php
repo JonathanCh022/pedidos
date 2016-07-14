@@ -1,12 +1,24 @@
 <?php 
 	include '../conexion.php';
+	session_start();
+	if(isset($_POST['fechainicial']) && isset($_POST['fechainicial']) && isset($_POST['fechainicial']) && isset($_POST['fechainicial']) ){
+		$_SESSION['fechainic'] =date("Y-m-d ", strtotime($_POST['fechainicial'])) ;
+	    $fechaInicio = $_SESSION['fechainic'];
+		$_SESSION['fechafinal'] =date("Y-m-d ", strtotime($_POST['fechafinal'])) ;
+		$fechaFinal= $_SESSION['fechafinal'];
+		$_SESSION['vend'] = $_POST['vendedor'];
+		$vendedor = $_SESSION['vend'];
+		$_SESSION['client'] = $_POST['cliente'];
+		$cliente = $_SESSION['client'];
+		
+	} 
 
-   $fechaInicio =date("Y-m-d ", strtotime($_POST['fechainicial'])) ;
-	$fechaFinal =date("Y-m-d ", strtotime($_POST['fechafinal'])) ;
-	$vendedor = $_POST['vendedor'];
-	$cliente = $_POST['cliente'];
+	$fechaInicio = $_SESSION['fechainic'];
+	$fechaFinal = $_SESSION['fechafinal'];
+	$vendedor = $_SESSION['vend'];
+	$cliente = $_SESSION['client'];
 
-	$sqlclt = "SELECT cli_nombre FROM  clientes WHERE cli_cedula = '$cliente'";
+    $sqlclt = "SELECT cli_nombre FROM  clientes WHERE cli_cedula = '$cliente'";
 	$sqlvnd = "SELECT ven_nombre FROM  vendedores WHERE ven_codigo = '$vendedor'";
 
 	$rst1 = $mysqli->query($sqlclt);
@@ -261,6 +273,7 @@
 					<div class="panel">
 						<h4>Informacion Pedidos <br><br> Cliente: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo "$nombre_cli ";?> <br> Vendedor:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo " $nombre_ven ";?> 
 							<br>Desde:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo " $fechaInicio ";?> <br>Hasta: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo " $fechaFinal ";?></h4>
+						<button type="button" name="salir"> <a href="cerrarsesion.php">Salir</a></button>
 					</div>
 					<div class="div3">
 					<table>
@@ -279,7 +292,7 @@
 							 $num = $row['pdg_numero'];
 							echo "<tr>";
 							echo "<td >";
-							echo '<a href="visualizarpedidosarticulo.php?id='.$row['pdg_numero'].'">'.$row['pdg_numero'].'</a>';
+							echo '<a href="visualizarpedidosarticuloap_dsp.php?id='.$row['pdg_numero'].'">'.$row['pdg_numero'].'</a>';
 							echo "</td>";
 							echo "<td >";
 							echo $row['pdg_fecha']; 
@@ -309,7 +322,7 @@
 							echo "<td >"; ?>
 							<form name="form2" method="post" action="update_estado.php">
 							<input type="text" name="nmo_ped" hidden value="<?php echo $num;?>" ></input>
-							<select id="estado" class="form-control  input-sm" name="estado" onchange="return confirm(asd);" style="width:95%;">
+							<select id="estado" class="form-control  input-sm" name="estado" onchange="this.form.submit()" style="width:95%;">
 							</select>
 							</form>
 							<?php
@@ -372,4 +385,8 @@
 			}
 			document.getElementById("estado").selectedIndex=std;
 	}
+
+$("#estado").change(function(){
+    confirm('Esta seguro de realizar esta accion?');
+});
 </script>
