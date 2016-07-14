@@ -17,7 +17,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Inicio Web service</title>
+    <title>Login</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="bootstrap/template01/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -47,7 +47,7 @@
 	<div class="row clearfix">
 		<div class="col-md-12 column">
         <!--<img alt="140x140" src="img/logo.png" class="img-responsive center-block"/> -->
-          <h2 class="page-header text-center">Servicio Web</h2>
+          <h2 class="page-header text-center">Pedidos</h2>
 		</div>
 	</div>
 </div>
@@ -129,20 +129,6 @@
     </div>
 
 
-
-<!--================================ footer ================================-->
-<div class="full-width-footer">
-<div class="container">
-	
-    <div class="row clearfix">
-	<div class="col-md-12 text-center">
-    <p>
-    <br><br>Copy © 2016 | Todos los derechos reservados.</p>
-    </div>
-	</div>
-</div>
-</div>
-<!--================================ footer ================================-->
 
 
 

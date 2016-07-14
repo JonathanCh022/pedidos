@@ -309,7 +309,7 @@
 							echo "<td >"; ?>
 							<form name="form2" method="post" action="update_estado.php">
 							<input type="text" name="nmo_ped" hidden value="<?php echo $num;?>" ></input>
-							<select id="estado" class="form-control  input-sm" name="estado" onchange="this.form.submit()" style="width:95%;">
+							<select id="estado" class="form-control  input-sm" name="estado" onchange="return confirm(asd);" style="width:95%;">
 							</select>
 							</form>
 							<?php

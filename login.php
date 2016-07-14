@@ -123,23 +123,6 @@
     </div>
 
 
-
-<!--================================ footer ================================-->
-<div class="full-width-footer">
-<div class="container">
-	
-    <div class="row clearfix">
-	<div class="col-md-12 text-center">
-    <p>
-    <br><br>Copy © 2016 | Todos los derechos reservados.</p>
-    </div>
-	</div>
-</div>
-</div>
-<!--================================ footer ================================-->
-
-
-
     <!-- jQuery -->
     <script src="bootstrap/template01/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript -->

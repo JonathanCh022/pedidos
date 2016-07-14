@@ -45,7 +45,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
-
+  <link rel="stylesheet" href="/resources/demos/style.css">
     <style type="text/css">
   input{
     width: 80%;
@@ -76,7 +76,7 @@
     border-width: 1px;
 }
 </style>
-  <!--  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script>
 
@@ -247,6 +247,18 @@
       xhttp.send();
       
     }
+   var nextinput = 1;
+    function AgregarCampos(){
+
+  nextinput++;
+
+  //campo = '<li id="rut'+nextinput+'">Campo:<input type="text" size="20" id="campo' + nextinput + '"&nbsp; name="campo' + nextinput + '"&nbsp; /></li>';
+
+  //campo = '<div id="campo' + nextinput + '" ><div id="div2" class="col-lg-4 "><label class="control-label" for="cuenta"  for="cuenta" > Cuenta: </label><input type="text" class="form-control input-sm" id="cuenta' + nextinput + '"&nbsp; name="cuenta' + nextinput + '"&nbsp; placeholder="Cuenta" /> </div> <div id="div2" class="col-lg-4 "><label class="control-label" for="dinero"  for="dinero" > Dinero: </label><input type="text" class="form-control input-sm" id="dinero' + nextinput + '"&nbsp; name="dinero' + nextinput + '"&nbsp; placeholder="Dinero" /> </div> </div>';
+  campo = '<div class="row"><div class="col-lg-2"><select id="combobox" name="combobox" ></select></div><div class="col-lg-2"><input type="text"></div><div class="col-lg-2"><input type="text"></div><div class="col-lg-2"><input type="text"></div><div class="col-lg-2"><input type="text"></div><div class="col-lg-2"><input type="text"></div></div>';
+
+  $("#campos").append(campo);
+  }
     </script>
 
 
@@ -393,112 +405,115 @@
         <div id="page-wrapper">
             <div class="container-fluid">
             <form id="form1" name="form1">
+            <div id="campos">
+                <div class="row">
+                <!-- InstanceBeginEditable name="EditRegion1" -->
+                    <div class="col-lg-12">
+                      <h1 class="page-header">Adicionar Pedidos</h1>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                    <!-- InstanceEndEditable -->
+
+              </div>
               <div class="row">
-                    <!-- InstanceBeginEditable name="EditRegion1" -->
-                   <div class="col-lg-12">
-                     <h1 class="page-header">Adicionar Pedidos</h1>
-                   </div>
-                        <!-- /.col-lg-12 -->
-                        <!-- InstanceEndEditable -->
-                  <div class="row">
-                      <div class="col-lg-2">
-                      <button type="button" id="adicionar" onclick="agregar();">adicionar </button>
-                          
-                      </div>
-                      <div class="col-lg-2">
-                      <button type="button"> modificar </button>
-                          
-                      </div>
-                      <div class="col-lg-2">
-                      <button type="button"> borrar </button>
-                          
-                      </div>
-                      <div class="col-lg-2">
-                      <button type="button"> terminar </button>
-                          
-                      </div>
-                      <div class="col-lg-2">
-                       <button type="button">cancelar </button>
-                          
-                      </div>
-                  </div>
+                <div class="col-lg-2">
+                <button type="button" >adicionar </button>
+                    
+                </div>
+                <div class="col-lg-2">
+                <button> modificar </button>
+                    
+                </div>
+                <div class="col-lg-2">
+                <button> buscar/borrar </button>
+                    
+                </div>
+                <div class="col-lg-2">
+                <input type="submit" value="terminar/enviar" />
+                    
+                </div>
+                <div class="col-lg-2">
+                 <button>cancelar </button>
+                    
+                </div>
+                </div>
+
+                
+                <div class="row">
+                <div class="col-lg-2">
+                Referencia
+                    
+                </div>
+                <div class="col-lg-2">
+                Cantidad
+           <!--       <input type="text" onkeyup="showHint(this.value)">
+                <span id="txtHint" style="font-size:12px;"></span>
+
+        -->
 
                     
-                  <div class="row">
-                    <div class="col-lg-2">
-                    Referencia
-                        
-                    </div>
-                    <div class="col-lg-2">
-                    Cantidad
-               <!--       <input type="text" onkeyup="showHint(this.value)">
-                    <span id="txtHint" style="font-size:12px;"></span>
-
-            -->  
-                    </div>
-                    <div class="col-lg-2">
-                    Descuento
-                        
-                    </div>
-                    <div class="col-lg-2">
-                    Neto
-                        
-                    </div>
-                    <div class="col-lg-2">
-                    Iva
-                        
-                    </div>
-                    <div class="col-lg-2">
-                    Total
-                        
-                    </div>
-                  </div>
-                    <!-- /.row -->
+                </div>
+                <div class="col-lg-2">
+                Descuento
+                    
+                </div>
+                <div class="col-lg-2">
+                Neto
+                    
+                </div>
+                <div class="col-lg-2">
+                Iva
+                    
+                </div>
+                <div class="col-lg-2">
+                Total
+                    
+                </div>
+                 </div>
+                <!-- /.row -->
 
 
-                  <div class="row">
-                      <div class="col-lg-2">
-                   <!--     <input type="text" onkeyup="showHint2(this.value,1)">
-                      <span id="txtHint1" style="font-size:12px;"></span>
-                          -->
-                      <select id="combobox" name="combobox" ></select>
-
-                      </div>
-                      <div class="col-lg-2">
-                       <input type="text" id="cantidad"  onkeyup="showHint(this.value);calcular();">
-                       <span id="txtHint" style="font-size:12px;"></span>
-            
-                      </div>
-                      <div class="col-lg-2">
-                      <input type="number" min="0" max="100" step="any" id="descuento" onkeyup="calcular();">
-                          
-                      </div>
-                      <div class="col-lg-2">
-                      <input type="text" id="neto" style="font-size:12px;" disabled>
-                          
-                      </div>
-                      <div class="col-lg-2">
-                      <input type="number" id="iva" style="font-size:12px;" disabled>
-                          
-                      </div>
-                      <div class="col-lg-2">
-                      <input type="number" id="total" disabled>
-                          
-                      </div>
-                  </div>
+                 <div class="row">
+                <div class="col-lg-2">
+             <!--     <input type="text" onkeyup="showHint2(this.value,1)">
+                <span id="txtHint1" style="font-size:12px;"></span>
+                    -->
 
 
-        <!-- /.row -->
 
-              </div>
-              <hr>
-              <div id="campos">
-                
-              </div>
+              <select id="combobox" name="combobox" onchange="window.alert(this.value)"></select>
 
+                </div>
+                <div class="col-lg-2">
+                 <input type="text" id="cantidad"  onkeyup="showHint(this.value);calcular();">
+                <span id="txtHint" style="font-size:12px;"></span>
+      
+                </div>
+                <div class="col-lg-2">
+               <input type="number" min="0" max="100" step="0.01" id="descuento" onkeyup="calcular();">
+                    
+                </div>
+                <div class="col-lg-2">
+                <input type="text" id="neto" style="font-size:12px;" disabled></input>
+                    
+                </div>
+                <div class="col-lg-2">
+                <input type="text" id="iva" style="font-size:12px;" disabled></input>
+                    
+                </div>
+                <div class="col-lg-2">
+                <input type="text" id="total" disabled>
+                    
+                </div>
+                 </div>
+
+
+    <!-- /.row -->
+
+          </div>
 
                 </form>
-                
+                <hr>
              </div>
             </div>
 
@@ -523,36 +538,9 @@
 </body>
 <InstanceEnd --></html>
 <script type="text/javascript">
-var nextinput = 1;
-
-    function agregar(){
-      campo = '<div class="row"><div class="col-lg-2"><input type="text" id="ref'+nextinput+'" name="ref'+nextinput+'" ></input></div><div class="col-lg-2"><input type="text" id="cantidad'+nextinput+'" name="cantidad'+nextinput+'"></div><div class="col-lg-2"><input type="text" id="descuento'+nextinput+'" name="descuento'+nextinput+'"></div><div class="col-lg-2"><input type="text" id="neto'+nextinput+'" name="neto'+nextinput+'"></div><div class="col-lg-2"><input type="text" id="iva'+nextinput+'" name="iva'+nextinput+'"></div><div class="col-lg-2"><input type="text" id="total'+nextinput+'" name="total'+nextinput+'"></div></div>';
-
-      if (document.getElementById("combobox").value !== "" && document.getElementById("cantidad").value !== "") {
-        $("#campos").append(campo);
-        document.getElementById("ref"+nextinput).value = document.getElementById("combobox").value;
-        document.getElementById("combobox").value = "";
-        document.getElementById("cantidad"+nextinput).value = document.getElementById("cantidad").value;
-        document.getElementById("cantidad").value = "";
-        document.getElementById("descuento"+nextinput).value = document.getElementById("descuento").value;
-        document.getElementById("descuento").value = "";
-        document.getElementById("neto"+nextinput).value = document.getElementById("neto").value;
-        document.getElementById("neto").value = "";
-        document.getElementById("iva"+nextinput).value = document.getElementById("iva").value;
-        document.getElementById("iva").value = "";
-        document.getElementById("total"+nextinput).value = document.getElementById("total").value;
-        document.getElementById("total").value = "";
-
-        nextinput++; 
-      }else{
-        window.alert("necesita un producto y una cantidad");
-      }
-
-    }
     function calcular(){
-      document.getElementById("total").value =  ((document.getElementById("neto").value-((document.getElementById("descuento").value*document.getElementById("neto").value)/100))*document.getElementById("cantidad").value);
+      document.getElementById("total").value =  (document.getElementById("cantidad").value*document.getElementById("neto").value);
     }
-
    function articulo(str) {
     if (str == "") {
         document.getElementById("neto").value = "";

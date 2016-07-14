@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.5.1
+-- version 4.5.2
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-07-2016 a las 01:36:31
--- Versión del servidor: 5.7.11
--- Versión de PHP: 5.6.19
+-- Tiempo de generación: 13-07-2016 a las 01:52:12
+-- Versión del servidor: 5.7.9
+-- Versión de PHP: 5.6.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -26,7 +26,8 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `clientes`
 --
 
-CREATE TABLE `clientes` (
+DROP TABLE IF EXISTS `clientes`;
+CREATE TABLE IF NOT EXISTS `clientes` (
   `cli_cedula` varchar(15) NOT NULL,
   `ven_codigo` varchar(5) NOT NULL,
   `cli_nombre` varchar(60) NOT NULL,
@@ -35,7 +36,9 @@ CREATE TABLE `clientes` (
   `cli_email` varchar(60) NOT NULL,
   `cli_telefono` varchar(60) NOT NULL,
   `cli_latitud` float NOT NULL,
-  `cli_longitud` float NOT NULL
+  `cli_longitud` float NOT NULL,
+  PRIMARY KEY (`cli_cedula`),
+  KEY `ven_codigo` (`ven_codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -45,8 +48,7 @@ CREATE TABLE `clientes` (
 INSERT INTO `clientes` (`cli_cedula`, `ven_codigo`, `cli_nombre`, `cli_negocio`, `cli_direccion`, `cli_email`, `cli_telefono`, `cli_latitud`, `cli_longitud`) VALUES
 ('1', '1', 'cliente1', 'asd', 'asd', 'asd', 'asd', 1, 1),
 ('2', '1', 'cliente2', 'awdsd', 'asdas', 'asd', 'asd', 2, 2),
-('3', '2', 'cliente3', 'asd', 'asd', 'asd', 'asd', 3, 3),
-('4', '1001', 'cliente4', 'asd', 'asd', 'ads', 'asd', 2, 2);
+('3', '2', 'cliente3', 'asd', 'asd', 'asd', 'asd', 3, 3);
 
 -- --------------------------------------------------------
 
@@ -54,7 +56,8 @@ INSERT INTO `clientes` (`cli_cedula`, `ven_codigo`, `cli_nombre`, `cli_negocio`,
 -- Estructura de tabla para la tabla `empresa`
 --
 
-CREATE TABLE `empresa` (
+DROP TABLE IF EXISTS `empresa`;
+CREATE TABLE IF NOT EXISTS `empresa` (
   `emp_nit` varchar(15) NOT NULL,
   `emp_raz_soc` varchar(120) NOT NULL,
   `emp_email` varchar(60) NOT NULL,
@@ -74,13 +77,15 @@ INSERT INTO `empresa` (`emp_nit`, `emp_raz_soc`, `emp_email`, `emp_telefono`) VA
 -- Estructura de tabla para la tabla `inventario`
 --
 
-CREATE TABLE `inventario` (
+DROP TABLE IF EXISTS `inventario`;
+CREATE TABLE IF NOT EXISTS `inventario` (
   `inv_referencia` varchar(20) NOT NULL,
   `inv_descripcion` varchar(100) NOT NULL,
   `inv_porc_iva` int(2) NOT NULL,
   `inv_precio_vta` float NOT NULL,
   `inv_existencias` float NOT NULL,
-  `inv_pedidas` float NOT NULL
+  `inv_pedidas` float NOT NULL,
+  PRIMARY KEY (`inv_referencia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -97,13 +102,16 @@ INSERT INTO `inventario` (`inv_referencia`, `inv_descripcion`, `inv_porc_iva`, `
 -- Estructura de tabla para la tabla `pedido_articulos`
 --
 
-CREATE TABLE `pedido_articulos` (
+DROP TABLE IF EXISTS `pedido_articulos`;
+CREATE TABLE IF NOT EXISTS `pedido_articulos` (
   `pda_numero` int(10) NOT NULL,
   `pda_referencia` varchar(20) NOT NULL,
   `pda_descuento` float NOT NULL,
   `pda_cantidad_ped` float NOT NULL,
   `pda_cantidad_apro` float NOT NULL,
-  `pda_cantidad_factu` float NOT NULL
+  `pda_cantidad_factu` float NOT NULL,
+  KEY `pda_numero` (`pda_numero`),
+  KEY `pda_referencia` (`pda_referencia`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -122,7 +130,8 @@ INSERT INTO `pedido_articulos` (`pda_numero`, `pda_referencia`, `pda_descuento`,
 -- Estructura de tabla para la tabla `pedido_general`
 --
 
-CREATE TABLE `pedido_general` (
+DROP TABLE IF EXISTS `pedido_general`;
+CREATE TABLE IF NOT EXISTS `pedido_general` (
   `pdg_numero` int(10) NOT NULL,
   `pdg_fecha` date NOT NULL,
   `pdg_cliente` varchar(15) NOT NULL,
@@ -130,7 +139,10 @@ CREATE TABLE `pedido_general` (
   `pdg_vendedor` varchar(5) NOT NULL,
   `pdg_hora` time NOT NULL,
   `pdg_latitud` float NOT NULL,
-  `pdg_longitud` float NOT NULL
+  `pdg_longitud` float NOT NULL,
+  PRIMARY KEY (`pdg_numero`),
+  KEY `pdg_vendedor` (`pdg_vendedor`),
+  KEY `pdg_cliente` (`pdg_cliente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -148,7 +160,8 @@ INSERT INTO `pedido_general` (`pdg_numero`, `pdg_fecha`, `pdg_cliente`, `pdg_est
 -- Estructura de tabla para la tabla `rutero`
 --
 
-CREATE TABLE `rutero` (
+DROP TABLE IF EXISTS `rutero`;
+CREATE TABLE IF NOT EXISTS `rutero` (
   `rut_vendedor` varchar(5) NOT NULL,
   `rut_dia` varchar(2) NOT NULL,
   `rut_cliente` varchar(15) NOT NULL,
@@ -161,11 +174,13 @@ CREATE TABLE `rutero` (
 -- Estructura de tabla para la tabla `usuarios`
 --
 
-CREATE TABLE `usuarios` (
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE IF NOT EXISTS `usuarios` (
   `usu_nit` varchar(15) NOT NULL,
   `usu_nombre` varchar(60) NOT NULL,
   `usu_clave` varchar(15) NOT NULL,
-  `usu_rol` varchar(1) NOT NULL
+  `usu_rol` varchar(1) NOT NULL,
+  PRIMARY KEY (`usu_nit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -181,67 +196,22 @@ INSERT INTO `usuarios` (`usu_nit`, `usu_nombre`, `usu_clave`, `usu_rol`) VALUES
 -- Estructura de tabla para la tabla `vendedores`
 --
 
-CREATE TABLE `vendedores` (
+DROP TABLE IF EXISTS `vendedores`;
+CREATE TABLE IF NOT EXISTS `vendedores` (
   `ven_codigo` varchar(5) NOT NULL,
   `ven_nombre` varchar(40) NOT NULL,
   `ven_email` varchar(40) NOT NULL,
   `ven_telefono` varchar(15) NOT NULL,
-  `usu_nit` varchar(15) NOT NULL
+  PRIMARY KEY (`ven_codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `vendedores`
 --
 
-INSERT INTO `vendedores` (`ven_codigo`, `ven_nombre`, `ven_email`, `ven_telefono`, `usu_nit`) VALUES
-('1', 'juan', 'asdsad', 'asasds', ''),
-('1001', 'javier', 'asd', 'asd', '1001'),
-('2', 'john', 'asdsad', 'asd', '');
-
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `clientes`
---
-ALTER TABLE `clientes`
-  ADD PRIMARY KEY (`cli_cedula`),
-  ADD KEY `ven_codigo` (`ven_codigo`);
-
---
--- Indices de la tabla `inventario`
---
-ALTER TABLE `inventario`
-  ADD PRIMARY KEY (`inv_referencia`);
-
---
--- Indices de la tabla `pedido_articulos`
---
-ALTER TABLE `pedido_articulos`
-  ADD KEY `pda_numero` (`pda_numero`),
-  ADD KEY `pda_referencia` (`pda_referencia`);
-
---
--- Indices de la tabla `pedido_general`
---
-ALTER TABLE `pedido_general`
-  ADD PRIMARY KEY (`pdg_numero`),
-  ADD KEY `pdg_vendedor` (`pdg_vendedor`),
-  ADD KEY `pdg_cliente` (`pdg_cliente`);
-
---
--- Indices de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`usu_nit`);
-
---
--- Indices de la tabla `vendedores`
---
-ALTER TABLE `vendedores`
-  ADD PRIMARY KEY (`ven_codigo`),
-  ADD KEY `usu_nit` (`usu_nit`);
+INSERT INTO `vendedores` (`ven_codigo`, `ven_nombre`, `ven_email`, `ven_telefono`) VALUES
+('1', 'juan', 'asdsad', 'asasds'),
+('2', 'john', 'asdsad', 'asd');
 
 --
 -- Restricciones para tablas volcadas
