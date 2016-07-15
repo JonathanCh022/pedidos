@@ -51,6 +51,15 @@
     width: 80%;
     height: 26px;
   }
+  .chk{
+    width: 20%;
+    height: auto;
+  }
+  .totals{
+    width: 40%;
+    height: auto;
+    border-style: none;
+  }
   .custom-combobox {
     position: relative;
     display: inline-block;
@@ -392,7 +401,7 @@
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
-            <form id="form1" name="form1">
+            <form id="form1" name="form1" method="post" action="conectarticulos.php">
               <div class="row">
                     <!-- InstanceBeginEditable name="EditRegion1" -->
                    <div class="col-lg-12">
@@ -410,15 +419,15 @@
                           
                       </div>
                       <div class="col-lg-2">
-                      <button type="button"> borrar </button>
+                      <button type="button" onclick="borrar();"> borrar </button>
                           
                       </div>
                       <div class="col-lg-2">
-                      <button type="button"> terminar </button>
+                      <button type="submit"> terminar </button>
                           
                       </div>
                       <div class="col-lg-2">
-                       <button type="button">cancelar </button>
+                      <a href="adicionarpedido.php"> <button type="button">cancelar </button></a>
                           
                       </div>
                   </div>
@@ -492,8 +501,16 @@
 
               </div>
               <hr>
-              <div id="campos">
-                
+              <div style="display:flex; flex-direction: row">
+                <div id="campos" style="flex:4;">
+                  
+                </div>
+                <div id="derecha" style="flex:1;">
+                <label>Subtotal: </label><input type="text" id="subt" class="totals" name="subt" disabled /><br>
+                 <label>Iva: </label><input type="text" id="ivat" class="totals" name="ivat" disabled /><br>
+                  <label>Total: </label><input type="text" id="finalt" class="totals" name="finalt" disabled />
+                  <input id="i" name="i" hidden />
+                </div>
               </div>
 
 
@@ -524,12 +541,13 @@
 <InstanceEnd --></html>
 <script type="text/javascript">
 var nextinput = 1;
-
     function agregar(){
-      campo = '<div class="row"><div class="col-lg-2"><input type="text" id="ref'+nextinput+'" name="ref'+nextinput+'" ></input></div><div class="col-lg-2"><input type="text" id="cantidad'+nextinput+'" name="cantidad'+nextinput+'"></div><div class="col-lg-2"><input type="text" id="descuento'+nextinput+'" name="descuento'+nextinput+'"></div><div class="col-lg-2"><input type="text" id="neto'+nextinput+'" name="neto'+nextinput+'"></div><div class="col-lg-2"><input type="text" id="iva'+nextinput+'" name="iva'+nextinput+'"></div><div class="col-lg-2"><input type="text" id="total'+nextinput+'" name="total'+nextinput+'"></div></div>';
+      campo = '<div id="campo'+nextinput+'" name="campo'+nextinput+'" class="row"><div class="col-lg-2"><label id="item'+nextinput+'" name="item'+nextinput+'"></label><input type="text" id="ref'+nextinput+'" name="ref'+nextinput+'" hidden></input></div><div class="col-lg-2"><input type="text" id="cantidad'+nextinput+'" name="cantidad'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="descuento'+nextinput+'" name="descuento'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="neto'+nextinput+'" name="neto'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="iva'+nextinput+'" name="iva'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="total'+nextinput+'" name="total'+nextinput+'" hidden></div></div>';
 
       if (document.getElementById("combobox").value !== "" && document.getElementById("cantidad").value !== "") {
         $("#campos").append(campo);
+
+        document.getElementById("item"+nextinput).innerHTML = document.getElementById("combobox").value + " x " + document.getElementById("cantidad").value;
         document.getElementById("ref"+nextinput).value = document.getElementById("combobox").value;
         document.getElementById("combobox").value = "";
         document.getElementById("cantidad"+nextinput).value = document.getElementById("cantidad").value;
@@ -542,12 +560,20 @@ var nextinput = 1;
         document.getElementById("iva").value = "";
         document.getElementById("total"+nextinput).value = document.getElementById("total").value;
         document.getElementById("total").value = "";
+        document.getElementById("i").value = nextinput;
 
         nextinput++; 
       }else{
         window.alert("necesita un producto y una cantidad");
       }
 
+    }
+    function borrar(){
+        if (nextinput>1) {
+          nextinput--;
+          $("#campo" + nextinput ).remove();
+          
+        }else exit();
     }
     function calcular(){
       document.getElementById("total").value =  ((document.getElementById("neto").value-((document.getElementById("descuento").value*document.getElementById("neto").value)/100))*document.getElementById("cantidad").value);

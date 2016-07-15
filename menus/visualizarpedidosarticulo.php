@@ -1,8 +1,7 @@
 <?php 
-    
-    $id= $_GET["id"];
+  $id= $_GET["id"];
     include '../conexion.php';
-    session_start();
+
   /*  $fechaInicio =date("Y-m-d ", strtotime($_POST['fechainicial'])) ;
     $fechaFinal =date("Y-m-d ", strtotime($_POST['fechafinal'])) ;
     $vendedor = $_POST['vendedor'];
@@ -59,40 +58,6 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-     <style type="text/css">
-        .clwhite{
-            color: white;
-        }
-
-        .trtit{
-            background-color:#1a75ff;
-        }
-
-        table {
-            overflow:hidden;
-            border:1px solid #d3d3d3;
-            background:#fefefe;
-            width:70%;
-            margin:5% auto 0;
-            -moz-border-radius:5px; /* FF1+ */
-            -webkit-border-radius:5px; /* Saf3-4 */
-            border-radius:5px;
-            -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-            -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-        }
-        th {
-            padding:18px 28px 18px; 
-            text-align:center; 
-            padding-top:22px;            
-            border-top:1px solid #e0e0e0;  
-            border-right:1px solid #e0e0e0;          
-        }
-        td {padding:8px 28px 8px; 
-            text-align:center; 
-            border-top:1px solid #e0e0e0; 
-            border-right:1px solid #e0e0e0;}
-    </style>
 
 </head>
 
@@ -241,19 +206,18 @@
                     <div class="col-lg-12">
                       <h1 class="page-header">Tabla Articulos Pedidos</h1>
                     </div>
-                    <div class="panel">
-                        <h4>Articulos del Pedido N° <?php echo "$id";?></h4>
-                         <button type="button" name="salir"> <a href="visualizarpedidostabla.php">Regresar</a></button>
+                    <div >
+                        <h4>Arcituclos del Pedido: <?php echo "$id";?></h4>
                     </div>
                     <div class="div3">
                     <table>
-                        <tr class="trtit">                    
-                            <td style="height: 10px;" class="clwhite">Articulo</td>
-                            <td style="height: 10px;" class="clwhite">Cantidad</td>
-                            <td style="height: 10px;" class="clwhite">Valor</td>
-                            <td style="height: 10px;" class="clwhite">Descuento</td>
-                            <td style="height: 10px;" class="clwhite">Neto</td>
-                            <td style="height: 10px;" class="clwhite">Estado</td>
+                        <tr>                    
+                            <td style="height: 10px;">Articulo</td>
+                            <td style="height: 10px;">Cantidad</td>
+                            <td style="height: 10px;">Valor</td>
+                            <td style="height: 10px;">Descuento</td>
+                            <td style="height: 10px;">Neto</td>
+                            <td style="height: 10px;">Estado</td>
                         </tr>
                         <?PHP     
                             if (mysqli_num_rows($resultado) > 0) {  
@@ -282,7 +246,7 @@
                             echo  $precio*$row['pda_cantidad_ped'];
                             echo "</td>";   
                             echo "<td >"; 
-                            echo $row['pda_estado'];
+                            echo "estado"; 
                             echo "</td>";
                             echo "</tr>";   
 
