@@ -55,6 +55,9 @@
     width: 20%;
     height: auto;
   }
+  .item{
+    white-space: nowrap;
+  }
   .totals{
     width: 40%;
     height: auto;
@@ -401,7 +404,11 @@
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
-            <form id="form1" name="form1" method="post" action="conectarticulos.php">
+            <form id="form1" name="form1" method="post" action="procesarpedido.php">
+            <input type="text" name="fecha" value="<?php echo $_POST['fecha']; ?>" hidden/>
+            <input type="text" name="vendedor" value="<?php echo $_POST['vencodigo']; ?>" hidden/>
+            <input type="text" name="cliente" value="<?php echo $_POST['cliente']; ?>" hidden/>
+            <input type="text" name="npedido" value="<?php echo $_POST['npedido']; ?>" hidden/>
               <div class="row">
                     <!-- InstanceBeginEditable name="EditRegion1" -->
                    <div class="col-lg-12">
@@ -484,10 +491,13 @@
                       </div>
                       <div class="col-lg-2">
                       <input type="text" id="neto" style="font-size:12px;" disabled>
+                       <input type="text" id="netoaux" hidden>
+                       <input type="text" id="subaux" hidden>
                           
                       </div>
                       <div class="col-lg-2">
                       <input type="number" id="iva" style="font-size:12px;" disabled>
+                      <input type="text" id="ivaux" hidden>
                           
                       </div>
                       <div class="col-lg-2">
@@ -506,9 +516,9 @@
                   
                 </div>
                 <div id="derecha" style="flex:1;">
-                <label>Subtotal: </label><input type="text" id="subt" class="totals" name="subt" disabled /><br>
-                 <label>Iva: </label><input type="text" id="ivat" class="totals" name="ivat" disabled /><br>
-                  <label>Total: </label><input type="text" id="finalt" class="totals" name="finalt" disabled />
+                <label>Subtotal: </label><input type="number" id="subt" value="0" class="totals" name="subt" disabled /><br>
+                 <label>Iva: </label><input type="number" id="ivat" value="0" class="totals" name="ivat" disabled /><br>
+                  <label>Total: </label><input type="number" id="finalt" value="0" class="totals" name="finalt" disabled />
                   <input id="i" name="i" hidden />
                 </div>
               </div>
@@ -540,14 +550,14 @@
 </body>
 <InstanceEnd --></html>
 <script type="text/javascript">
-var nextinput = 1;
+var nextinput = 1;  
     function agregar(){
-      campo = '<div id="campo'+nextinput+'" name="campo'+nextinput+'" class="row"><div class="col-lg-2"><label id="item'+nextinput+'" name="item'+nextinput+'"></label><input type="text" id="ref'+nextinput+'" name="ref'+nextinput+'" hidden></input></div><div class="col-lg-2"><input type="text" id="cantidad'+nextinput+'" name="cantidad'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="descuento'+nextinput+'" name="descuento'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="neto'+nextinput+'" name="neto'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="iva'+nextinput+'" name="iva'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="total'+nextinput+'" name="total'+nextinput+'" hidden></div></div>';
+      campo = '<div id="campo'+nextinput+'" name="campo'+nextinput+'" class="row"><div class="col-lg-2"><p id="item'+nextinput+'" class="item" name="item'+nextinput+'"></p><input type="text" id="ref'+nextinput+'" name="ref'+nextinput+'" hidden></input></div><div class="col-lg-2"><input type="text" id="cantidad'+nextinput+'" name="cantidad'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="descuento'+nextinput+'" name="descuento'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="neto'+nextinput+'" name="neto'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="iva'+nextinput+'" name="iva'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="total'+nextinput+'" name="total'+nextinput+'" hidden></div></div>';
 
       if (document.getElementById("combobox").value !== "" && document.getElementById("cantidad").value !== "") {
         $("#campos").append(campo);
 
-        document.getElementById("item"+nextinput).innerHTML = document.getElementById("combobox").value + " x " + document.getElementById("cantidad").value;
+        document.getElementById("item"+nextinput).innerHTML = document.getElementById("cantidad").value  + " x " +  document.getElementById("combobox").value + " " + document.getElementById("neto").value + " " + document.getElementById("iva").value + " " + document.getElementById("total").value;
         document.getElementById("ref"+nextinput).value = document.getElementById("combobox").value;
         document.getElementById("combobox").value = "";
         document.getElementById("cantidad"+nextinput).value = document.getElementById("cantidad").value;
@@ -556,13 +566,15 @@ var nextinput = 1;
         document.getElementById("descuento").value = "";
         document.getElementById("neto"+nextinput).value = document.getElementById("neto").value;
         document.getElementById("neto").value = "";
+         document.getElementById("netoaux").value = "";
         document.getElementById("iva"+nextinput).value = document.getElementById("iva").value;
         document.getElementById("iva").value = "";
         document.getElementById("total"+nextinput).value = document.getElementById("total").value;
         document.getElementById("total").value = "";
         document.getElementById("i").value = nextinput;
+        caltotal(); 
+        nextinput++;
 
-        nextinput++; 
       }else{
         window.alert("necesita un producto y una cantidad");
       }
@@ -572,16 +584,33 @@ var nextinput = 1;
         if (nextinput>1) {
           nextinput--;
           $("#campo" + nextinput ).remove();
-          
+          caltotal();          
         }else exit();
     }
     function calcular(){
-      document.getElementById("total").value =  ((document.getElementById("neto").value-((document.getElementById("descuento").value*document.getElementById("neto").value)/100))*document.getElementById("cantidad").value);
+       document.getElementById("neto").value =  document.getElementById("netoaux").value - ((document.getElementById("netoaux").value*document.getElementById("descuento").value)/100);
+       document.getElementById("ivaux").value = ((document.getElementById("neto").value*document.getElementById("cantidad").value)*document.getElementById("iva").value/100);
+       document.getElementById("subaux").value = document.getElementById("neto").value*document.getElementById("cantidad").value;
+      document.getElementById("total").value = ((document.getElementById("neto").value*document.getElementById("cantidad").value)*document.getElementById("iva").value/100) + (document.getElementById("neto").value*document.getElementById("cantidad").value);
     }
+    function caltotal(){
+      document.getElementById("subt").value = 0;
+        document.getElementById("ivat").value = 0;
+        document.getElementById("finalt").value = 0;
+        for (var i = 1; i <= nextinput; i++) {
+          document.getElementById("subt").value = parseFloat(document.getElementById("subt").value) + ((parseFloat(document.getElementById("neto"+i).value)*document.getElementById("cantidad"+i).value));
+          document.getElementById("ivat").value = parseFloat(document.getElementById("ivat").value) + ((parseFloat(document.getElementById("neto"+i).value)*parseFloat(document.getElementById("cantidad"+i).value)*parseFloat(document.getElementById("iva"+i).value))/100);
+          document.getElementById("finalt").value = parseFloat(document.getElementById("finalt").value) + parseFloat(document.getElementById("total"+i).value);
+        }
 
+    //  document.getElementById("subt").value = parseFloat(document.getElementById("subt").value)+parseFloat(document.getElementById("subaux").value);
+     //   document.getElementById("ivat").value = parseFloat(document.getElementById("ivat").value)+parseFloat(document.getElementById("ivaux").value);
+     //   document.getElementById("finalt").value = parseFloat(document.getElementById("finalt").value)+parseFloat(document.getElementById("total").value);
+    }
    function articulo(str) {
     if (str == "") {
         document.getElementById("neto").value = "";
+        document.getElementById("netoaux").value = "";
         document.getElementById("iva").value = "";
         return;
     } else { 
@@ -597,6 +626,7 @@ var nextinput = 1;
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 document.getElementById("neto").value = xmlhttp.responseText ;
+                document.getElementById("netoaux").value = xmlhttp.responseText ;
             }
         };
         xmlhttp2.onreadystatechange = function() {

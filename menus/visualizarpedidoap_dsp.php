@@ -269,9 +269,9 @@ while ($row = $res1->fetch_assoc()) {
     }
 
   function clt() {
-            var index = document.forms.form1.vendedor.selectedIndex ;
+            var index = document.forms.form1.vendedor.value;
           
-            index = index + 1 ;
+           // index = index + 1 ;
 
             var x = new Array();
             var y = new Array();

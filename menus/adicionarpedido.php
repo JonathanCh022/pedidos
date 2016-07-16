@@ -46,6 +46,9 @@ while ($row = $res1->fetch_assoc()) {
     <!-- Custom Fonts -->
     <link href="../bootstrap/template01/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
+
+
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -205,11 +208,12 @@ while ($row = $res1->fetch_assoc()) {
                         <input  type="text" class="form-control input-sm"   name="fecha" id="fecha" style="cursor: hand;width:20%;" required > 
                         <label class=" control-label" for="vendedor" >Vendedor : </label>   
                                     <input class="form-control  input-sm" name="vendedor" value="<?php echo $_SESSION['ven_nombre']; ?>" required style="width:20%;" disabled></input>
+                                    <input name="vencodigo" value="<?php echo $_SESSION['ven_codigo']; ?>" hidden></input>
                          <label class=" control-label" for="vendedor" >Cliente : </label>   
                                     <select class="form-control  input-sm" name="cliente" required style="width:20%;">
                                     </select>
                         <label>Numero Pedido : </label>
-                        <input  type="text" class="form-control input-sm"   name="fecha" id="fecha" style="width:20%;" required > 
+                        <input  type="text" class="form-control input-sm" name="npedido" id="npedido" style="width:20%;" required > 
                         <br>
                          <input type="submit" value="Continuar" style="color: black;" />
                         <a href="../menus" style="color: black;"> <button type="button">Cancelar</button></a>
@@ -270,11 +274,14 @@ while ($row = $res1->fetch_assoc()) {
 	var año = date.getFullYear();
 	var mes = date.getMonth();
 	var ndia = date.getDate();
+    var nhora = date.getHours();
+    var nmin = date.getMinutes();
+    var nseg = date.getSeconds();
 
 	//Damos a los meses el valor en número
 	mes+=1;
 
-	var f2 = mes + "/"+ ndia + "/" + año;
+	var f2 = mes + "/"+ ndia + "/" + año + " " + nhora+":"+nmin+":"+nseg;
 	//juntamos todos los datos en una variable
 	document.getElementById('fecha').value = f2;
 
