@@ -322,7 +322,7 @@
 							echo "<td >"; ?>
 							<form name="form2" method="post" action="update_estado.php">
 							<input type="text" name="nmo_ped" hidden value="<?php echo $num;?>" ></input>
-							<select id="estado" class="form-control  input-sm" name="estado" onchange="this.form.submit()" style="width:95%;">
+							<select id="estado" class="form-control  input-sm" name="estado" onchange="myFunction()" style="width:95%;">
 							</select>
 							</form>
 							<?php
@@ -386,7 +386,12 @@
 			document.getElementById("estado").selectedIndex=std;
 	}
 
-$("#estado").change(function(){
-    confirm('Esta seguro de realizar esta accion?');
-});
+
+function myFunction() {
+    var r = confirm("Desea realizar esta accion?");
+	if (r == true) {
+		document.form2.submit();
+	} 
+}
+
 </script>

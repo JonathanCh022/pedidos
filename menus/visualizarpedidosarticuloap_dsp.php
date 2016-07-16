@@ -17,7 +17,8 @@
     $resultado =  $mysqli->query($sqlpedidoarticulo);
     $rest=  $mysqli->query($sqlpedidoarticulo);
       while ($fila = $rest->fetch_assoc()) {       
-        $estado=$fila['pda_estado'];                
+        $est[]=$fila['pda_estado']; 
+
     }
   
     $estados = [
@@ -264,9 +265,11 @@
                             <td style="height: 10px;" class="clwhite">Estado</td>
                         </tr>
                         <?PHP     
+                            $i = 0;
                             if (mysqli_num_rows($resultado) > 0) {  
                              while($row = mysqli_fetch_assoc($resultado)) {
-                            $num = $row['pda_referencia']; 
+                            $num = $row['pda_numero']; 
+                            $referenc = $row['pda_referencia']; 
                             echo "<tr>";
                             echo "<td >";
                             echo $row['pda_referencia']; 
@@ -291,15 +294,17 @@
                             echo  $precio*$row['pda_cantidad_ped'];
                             echo "</td>";   
                             echo "<td >";?>
-                            <form name="form2" method="post" action="update_estado.php">
+                            <form id="form<?php echo $i; ?>" name="form2" method="post" action="update_estado_art.php" onsubmit="return confirm('¿Esta seguro que desea enviar el formulario?');">
                             <input type="text" name="nmo_ped" hidden value="<?php echo $num;?>" ></input>
-                            <select id="estado" class="form-control  input-sm" name="estado" onchange="this.form.submit()" style="width:95%;">
+                            <select class="form-control  input-sm" onchange="this.form.submit();" style="width:95%;" name="estado" id="estado<?php echo $i; ?>" >                                
                             </select>
+                            <input type="text" name="ref_ped" hidden value="<?php echo $referenc;?>" ></input>
+                            <input type="text" name="id" hidden value="<?php echo $id;?>" ></input>
                             </form>
                             <?php
                             echo "</td>";
                             echo "</tr>";   
-
+                            $i++;
                             }
                             } else {
                                 echo "NO HAY USUARIOS REGISTRADOS";//login no exitoso
@@ -339,26 +344,47 @@
 <script type="text/javascript">
     
  function est()
-    {           
+    {        
             var a = new Array();
-            var std = 0;                       
+            var std = new Array();                       
             var cont = 0;
             <?php
             for ($i = 0, $total = count($estados); $i < $total; $i ++) {               
                 echo "\na[$i] = '$estados[$i]';";              
             }
-            echo "\nstd = $estado;";
-            ?>
-            form2.estado.length=0;
-            for (var i = 0; i < a.length; i++) {            
-                opcion1 = new Option(a[i],i);
-                document.forms.form2.estado.options[cont]=opcion1;              
-                cont++;         
+            for ($i=0 , $total1 = count($est); $i < $total1 ; $i++) { 
+                echo "\nstd[$i] = $est[$i];";
             }
-            document.getElementById("estado").selectedIndex=std;
-    }
+           
+            ?>
+            
+            var x = document.forms.length;
+            
+            for (var j= 0; j < x; j++) {
+                estado = document.getElementById("form"+j).elements[1].id; 
+                cont = 0;
+                for (var i = 0; i < a.length; i++) {
+                    opcion1 = new Option(a[i],i);                                       
+                    document.getElementById(estado).options[cont]=opcion1;                                 
+                    cont++;                          
+                }
+            }
+                
+            for (var i = 0; i < std.length; i++) {            
+                
+               document.getElementById("estado"+i).selectedIndex=std[i];                        
+            }
 
-$("#estado").change(function(){
-    confirm('Esta seguro de realizar esta accion?');
-});
+             
+            
+    }
+/*
+$("#estado").onchange(function(){
+    if (return confirm('Esta seguro de realizar esta accion?')) {
+        
+       
+}); */
+
+
+
 </script>
