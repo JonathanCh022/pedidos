@@ -9,9 +9,14 @@
 		$_SESSION['vend'] = $_POST['vendedor'];
 		$vendedor = $_SESSION['vend'];
 		$_SESSION['client'] = $_POST['cliente'];
-		$cliente = $_SESSION['client'];
-		
+		$cliente = $_SESSION['client'];		
 	} 
+
+	if (isset($_GET['confirmacion'])) {
+		$conf = $_GET['confirmacion'];
+	}else {
+		$conf = 0;
+	}
 
 	$fechaInicio = $_SESSION['fechainic'];
 	$fechaFinal = $_SESSION['fechafinal'];
@@ -127,7 +132,7 @@
 
 
 
-<body onload="est();">
+<body onload=" validarlogin(<?php echo "$conf";?>); est(); ">
 
 <div id="wrapper">
 
@@ -273,7 +278,7 @@
 					<div class="panel">
 						<h4>Informacion Pedidos <br><br> Cliente: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo "$nombre_cli ";?> <br> Vendedor:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo " $nombre_ven ";?> 
 							<br>Desde:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo " $fechaInicio ";?> <br>Hasta: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo " $fechaFinal ";?></h4>
-						<button type="button" name="salir"> <a href="cerrarsesion.php">Salir</a></button>
+						 <a href="cerrarsesion.php" class="btn btn-default">Salir</a>
 					</div>
 					<div class="div3">
 					<table>
@@ -340,7 +345,26 @@
 				</div>
 			  </div>
 				<!-- /.row -->
+			<div id="myModal2" class="modal fade" role="dialog">
+		      <div class="modal-dialog " style="width: 27%; ">
 
+		        <!-- Modal content-->
+		        <div class="modal-content">
+		          <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          </div>
+		          <div id="light" class="modal-body" style="background-color:#f5f5f0; ">
+		               <div class="panel ">
+		                    <div class="panel-body ">
+		                   		<span class="glyphicon glyphicon-saved " style="font-size:50px; margin-left:40%;"></span>
+		                   		<h3 class="text-center">Datos actualizados satisfactoriamente.</h3>
+		                    </div>               
+		                </div>                
+		          </div>          
+		        </div>
+
+		      </div>
+		    </div> 	
 			</div>
 
 			<!-- /.container-fluid -->
@@ -393,5 +417,13 @@ function myFunction() {
 		document.form2.submit();
 	} 
 }
+
+function validarlogin(error){
+    if (error == 1) {
+           $( document ).ready( function() {
+                $( '#myModal2' ).modal( 'toggle' );
+            });
+           }
+        }
 
 </script>

@@ -278,7 +278,7 @@
                     <div class="panel">
                         <h4>Informacion Pedidos <br><br> Cliente: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo "$nombre_cli ";?> <br> Vendedor:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo " $nombre_ven ";?> 
                             <br>Desde:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <?php echo " $fechaInicio ";?> <br>Hasta: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo " $fechaFinal ";?></h4>
-                            <button type="button" name="salir"> <a href="visualizarpedidos.php">Salir</a></button>
+                             <a href="visualizarpedidos.php" class="btn btn-default">Salir</a>
                     </div>
                     <div class="div3">
                     <table>

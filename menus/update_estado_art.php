@@ -1,10 +1,23 @@
 <?php 
 include '../conexion.php';
 $id = $_POST['id'];
-$newestad = $_POST['estado'];
+if (isset($_POST['estado'])) {
+	$newestad = $_POST['estado'];
+}else{
+	$newestad = 1;
+}
+
 $num = $_POST['nmo_ped'];
 $referenc = $_POST['ref_ped'];
-$sqlupdt = "UPDATE pedido_articulos SET pda_estado = $newestad WHERE pda_numero = '$num' AND  pda_referencia = '$referenc'" ; 
+if (isset($_POST['cant']) && isset($_POST['desc'])) {
+	$descuento = $_POST['desc'];
+	$ncantidad = $_POST['cant'];
+	$sqlupdt = "UPDATE pedido_articulos SET pda_estado = $newestad, pda_descuento = $descuento, pda_cantidad_apro = $ncantidad  WHERE pda_numero = '$num' AND  pda_referencia = '$referenc'" ;
+}else{
+	$sqlupdt = "UPDATE pedido_articulos SET pda_estado = $newestad WHERE pda_numero = '$num' AND  pda_referencia = '$referenc'" ;
+}
+echo $referenc;
+ 
 $mysqli->query($sqlupdt);
 
 $sqlaprob = "SELECT pda_estado FROM  pedido_articulos WHERE pda_numero = $id";
@@ -35,8 +48,5 @@ if ($a == count($estado)) {
 	$mysqli->query($sqlupdt3);
 }
 
-
-
-
-//header('location: visualizarpedidosarticuloap_dsp.php?id='.$id.'');
+header('location: visualizarpedidosarticuloap_dsp.php?id='.$id.'&confirmacion=1');
 ?>

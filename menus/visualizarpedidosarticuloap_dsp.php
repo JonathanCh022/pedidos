@@ -7,10 +7,11 @@
     $vendedor = $_POST['vendedor'];
     $cliente = $_POST['cliente']; */
 
-    $fechaInicio ="2016-07-03" ;
-    $fechaFinal ="2016-07-05";
-    $vendedor = "2";
-    $cliente = "javier"; 
+    if (isset($_GET['confirmacion'])) {
+		$conf = $_GET['confirmacion'];
+	}else {
+		$conf = 0;
+	}
 
     $sqlpedidoarticulo = "SELECT * FROM pedido_articulos WHERE   pda_numero = '$id' ";
    
@@ -50,6 +51,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+     <!-- <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script> -->
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/template01/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -107,7 +109,7 @@
 
 
 
-<body onload="est();">
+<body onload="validarlogin(<?php echo "$conf";?>); est();">
 
 <div id="wrapper">
 
@@ -252,7 +254,7 @@
                     </div>
                     <div class="panel">
                         <h4>Articulos del Pedido N° <?php echo "$id";?></h4>
-                         <button type="button" name="salir"> <a href="aprobar_desaprobar.php">Regresar</a></button>
+                          <a href="aprobar_desaprobar.php" class="btn btn-default">Regresar</a>
                     </div>
                     <div class="div3">
                     <table>
@@ -294,17 +296,46 @@
                             echo  $precio*$row['pda_cantidad_ped'];
                             echo "</td>";   
                             echo "<td >";?>
-                            <form id="form<?php echo $i; ?>" name="form2" method="post" action="update_estado_art.php" onsubmit="return confirm('¿Esta seguro que desea enviar el formulario?');">
+                            <form  name="form2" method="post" action="update_estado_art.php"  id="form<?php echo $i; ?>">
                             <input type="text" name="nmo_ped" hidden value="<?php echo $num;?>" ></input>
-                            <select class="form-control  input-sm" onchange="this.form.submit();" style="width:95%;" name="estado" id="estado<?php echo $i; ?>" >                                
+                            <select class="form-control  input-sm" onchange="myFunction2(this.value,<?php echo $i; ?>)" style="width:95%;" name="estado" id="estado<?php echo $i; ?>" >                                
                             </select>
                             <input type="text" name="ref_ped" hidden value="<?php echo $referenc;?>" ></input>
                             <input type="text" name="id" hidden value="<?php echo $id;?>" ></input>
                             </form>
+
+                             <div id="myModal<?php echo $i; ?>" class="modal fade" role="dialog">
+						      <div class="modal-dialog " style="width: 27%; ">
+
+						        <!-- Modal content-->
+						        <div class="modal-content">
+						          <div class="modal-header">
+						                <button type="button" class="close" data-dismiss="modal">&times;</button>
+						          </div>
+						          <div id="light" class="modal-body" style="background-color:#f5f5f0; ">
+						               <div class="panel ">
+						                    <div class="panel-body ">
+						                   		<form name="formact" method="POST" autocomplete="off" action="update_estado_art.php" id="formact<?php echo $i; ?>">
+							                   		<input type="text" name="ref_ped"  hidden value="<?php echo $referenc;?>" ></input>
+					                            	<input type="text" name="id" hidden value="<?php echo $id;?>" ></input>
+					                            	<input type="text" name="nmo_ped" hidden value="<?php echo $num;?>" ></input>
+							                        <label class="control-label">Cantidad:</label>
+							                        <input type="text" name="cant" maxlength="7" class="form-control" onkeyup="autocomp(<?php echo $i; ?> , this.value, '<?php echo $referenc;?>' )"><span id="txtHint<?php echo $i; ?>" style="font-size:12px;"></span><br>
+							                        <label class="control-label">Descuento:</label>
+							                        <input type="text" name="desc" class="form-control" maxlength="2"><br>
+							                        <input type="button" name="sbt" onclick="myFunction(<?php echo $i; ?>)" value="Actualizar" class="btn btn-default">
+						                        </form>
+						                    </div>              
+						                </div>                
+						          </div>          
+						        </div>
+
+						      </div>
+						    </div>  
                             <?php
                             echo "</td>";
                             echo "</tr>";   
-                            $i++;
+                            $i++;                            
                             }
                             } else {
                                 echo "NO HAY USUARIOS REGISTRADOS";//login no exitoso
@@ -316,7 +347,26 @@
                 </div>
               </div>
                 <!-- /.row -->
+           	  	<div id="Modal" class="modal fade" role="dialog">
+			      <div class="modal-dialog " style="width: 27%; ">
 
+			        <!-- Modal content-->
+			        <div class="modal-content">
+			          <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal">&times;</button>
+			          </div>
+			          <div id="light" class="modal-body" style="background-color:#f5f5f0; ">
+			               <div class="panel ">
+			                    <div class="panel-body ">
+			                   		<span class="glyphicon glyphicon-saved " style="font-size:50px; margin-left:40%;"></span>
+			                   		<h3 class="text-center">Datos actualizados satisfactoriamente.</h3>
+			                    </div>               
+			                </div>                
+			          </div>          
+			        </div>
+
+			      </div>
+			    </div> 	
             </div>
 
             <!-- /.container-fluid -->
@@ -349,16 +399,17 @@
             var std = new Array();                       
             var cont = 0;
             <?php
+            echo "\nextform = $i";
             for ($i = 0, $total = count($estados); $i < $total; $i ++) {               
                 echo "\na[$i] = '$estados[$i]';";              
             }
             for ($i=0 , $total1 = count($est); $i < $total1 ; $i++) { 
                 echo "\nstd[$i] = $est[$i];";
-            }
-           
+            }           
             ?>
+           
             
-            var x = document.forms.length;
+            var x = document.forms.length - extform;
             
             for (var j= 0; j < x; j++) {
                 estado = document.getElementById("form"+j).elements[1].id; 
@@ -371,20 +422,59 @@
             }
                 
             for (var i = 0; i < std.length; i++) {            
-                
+               
                document.getElementById("estado"+i).selectedIndex=std[i];                        
-            }
-
-             
+            }            
             
     }
-/*
-$("#estado").onchange(function(){
-    if (return confirm('Esta seguro de realizar esta accion?')) {
-        
-       
-}); */
+
+function myFunction(formulario) {
+	if ($("#txtHint"+formulario).text() == "") {
+		var r = confirm("Desea realizar esta accion?");
+		if (r == true  ) {		
+			document.getElementById("formact"+formulario).submit();
+		} 	
+	}else {window.alert("Cantidad no valida.");}
+}
+    
+
+function myFunction2(opc,formulario) {
+	
+	if (opc == 1) {		 
+                $( '#myModal'+formulario ).modal( 'toggle' );            
+		}else{ 
+			var t = confirm("Desea realizar esta accion?");
+			if (t == true) {
+				document.getElementById("form"+formulario).submit();								
+			} 
+		}
+   
+}
+
+function validarlogin(error){
+    if (error == 1) {
+           $( document ).ready( function() {
+                $( '#Modal' ).modal( 'toggle' );
+            });
+           }
+        }
 
 
+    function autocomp(div,val,ref){    	
+    	if (val.length == 0) {
+	        document.getElementById("txtHint"+div).innerHTML = "";
+	        return;
+	      }
+    	$.post("checkinv.php",
+        	{
+        name:val,
+        city:ref   	
+    	}, function(data, status){
+            //window.alert("Data: " + data + "\nStatus: " + status);
+            document.getElementById("txtHint"+div).innerHTML = data;
+        });
+    }
 
+
+		
 </script>

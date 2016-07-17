@@ -14,7 +14,7 @@ while ($row = $res1->fetch_assoc()) {
         $arreglo3[]=$row['cli_nombre'];   
         $arreglo4[]=$row['ven_codigo'];
          $arreglo5[]=$row['cli_cedula'];    
-         echo $row['cli_nombre'];        
+                
 }
 
 ?>
