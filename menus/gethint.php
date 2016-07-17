@@ -1,7 +1,7 @@
 <?php
 include '../conexion.php';
 $q = intval($_GET['q']);
-$articulo = "leche";
+$articulo = $_GET['p'];
 
 $sql = "SELECT inv_existencias FROM inventario WHERE inv_referencia = '$articulo'";
 

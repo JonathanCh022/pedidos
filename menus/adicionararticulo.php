@@ -91,6 +91,7 @@
   <!--  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
   <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script>
+    var art= "";
 
 
     $( function() {
@@ -226,6 +227,8 @@
  
     $("#combobox").combobox({                    
                 select: function (event, ui) {
+                  art = this.value;
+                  //window.alert(this.value);
                    articulo(this.value);//ejecucion 
                    
                 }
@@ -236,7 +239,7 @@
   } );
 
 
-    function showHint(str) {
+    function showHint(str,art) {
       var xhttp;
       if (str.length == 0) {
         document.getElementById("txtHint").innerHTML = "";
@@ -255,7 +258,7 @@
           }
         }
       };
-      xhttp.open("GET", "gethint.php?q="+str, true);
+      xhttp.open("GET", "gethint.php?q="+str+"&p="+art, true);
       xhttp.send();
       
     }
@@ -481,7 +484,7 @@
 
                       </div>
                       <div class="col-lg-2">
-                       <input type="text" id="cantidad"  onkeyup="showHint(this.value);calcular();">
+                       <input type="text" id="cantidad"  onkeyup="showHint(this.value,art);calcular();">
                        <span id="txtHint" style="font-size:12px;"></span>
             
                       </div>
