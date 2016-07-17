@@ -1,5 +1,7 @@
 <?php 
-
+error_reporting(0);
+ini_set('display_errors', 0);
+header("Content-Type: text/html;charset=utf-8");
 session_start();
 echo $_SESSION['ven_codigo'];
 include '../conexion.php';
@@ -213,7 +215,8 @@ while ($row = $res1->fetch_assoc()) {
                                     <select class="form-control  input-sm" name="cliente" required style="width:20%;">
                                     </select>
                         <label>Numero Pedido : </label>
-                        <input  type="text" class="form-control input-sm" name="npedido" id="npedido" style="width:20%;" required > 
+                        <input  type="text" class="form-control input-sm" name="npedido" id="npedido"  onkeyup="showHint(this.value);" style="width:20%;" required >
+                        <span id="txtHint" style="font-size:12px;"></span>
                         <br>
                          <input type="submit" value="Continuar" style="color: black;" />
                         <a href="../menus" style="color: black;"> <button type="button">Cancelar</button></a>
@@ -248,6 +251,27 @@ while ($row = $res1->fetch_assoc()) {
 <InstanceEnd --></html>
 
 <script type="text/javascript">
+    function showHint(str) {
+      var xhttp;
+      if (str.length == 0) {
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+      }
+      xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          document.getElementById("txtHint").innerHTML = xhttp.responseText;
+          if (document.getElementById("txtHint").innerHTML == "" ) {
+            //suficientes existencias
+          }else{
+            //nno hay suficientes existencias
+          }
+        }
+      };
+      xhttp.open("GET", "npedido.php?q="+str, true);
+      xhttp.send();
+      
+    }
 
     function clt()
     {           

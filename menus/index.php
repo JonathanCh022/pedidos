@@ -1,6 +1,8 @@
 <?php
+error_reporting(0);
+ini_set('display_errors', 0);
+header("Content-Type: text/html;charset=utf-8");
     session_start();
-
 ?>
 
 
@@ -164,10 +166,21 @@
 				<!-- InstanceBeginEditable name="EditRegion1" -->
                     <div class="col-lg-12">
                       <h1 class="page-header">Contenido General</h1>
+
                     </div>
                     <!-- /.col-lg-12 -->
                     <!-- InstanceEndEditable -->
               </div>
+              <?php
+
+
+              if (isset($_GET['pedido'])) {
+                $pedido = $_GET['pedido'];
+                echo "Se ha realizado exitosamento el pedido ".$pedido.".";
+            }
+
+                ?>
+
                 <!-- /.row -->
             </div>
             <!-- /.container-fluid -->

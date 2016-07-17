@@ -1,4 +1,7 @@
 <?php
+error_reporting(0);
+ini_set('display_errors', 0);
+header("Content-Type: text/html;charset=utf-8");
   include '../conexion.php';
   $fech=date("Y-m-d", strtotime($_POST['fecha']));
   $time=date("H:i:s", strtotime($_POST['fecha']));
@@ -10,7 +13,7 @@
   		$sqlarticulo = "INSERT INTO pedido_articulos (pda_numero,pda_referencia,pda_descuento,pda_cantidad_ped,pda_cantidad_apro,pda_cantidad_factu,pda_estado) VALUES ('".$_POST['npedido']."','".$_POST['ref'.$i]."','".$_POST['descuento'.$i]."','".$_POST['cantidad'.$i]."','0','0','1')";
 
   		if ($mysqli->query($sqlarticulo) === TRUE) {
-  			echo "exito agregando articulos";
+  			header('Location: index.php?pedido='.$_POST['npedido']);
   		}else{
   			echo "problema con los articulos";
   			echo "Error: " . $sqlarticulo . "<br>" . $mysqli->error;

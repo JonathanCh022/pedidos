@@ -1,4 +1,7 @@
 <?php
+  error_reporting(0);
+  ini_set('display_errors', 0);
+  header("Content-Type: text/html;charset=utf-8");
   include '../conexion.php';
   $sqlinv = "SELECT *  FROM inventario";
   $res = $mysqli->query($sqlinv);
@@ -262,6 +265,17 @@
       xhttp.send();
       
     }
+    $(function() {
+    $('#form1').submit(function() {
+      if (nextinput==1) {
+        window.alert("Debe ingrear almenos un articulo");
+        return false;
+      }else{
+        return true;
+       // return false to cancel form action
+      }
+    });
+});
     </script>
 
 
@@ -433,7 +447,7 @@
                           
                       </div>
                       <div class="col-lg-2">
-                      <button type="submit"> terminar </button>
+                      <button type="submit" > terminar </button>
                           
                       </div>
                       <div class="col-lg-2">
@@ -484,27 +498,27 @@
 
                       </div>
                       <div class="col-lg-2">
-                       <input type="text" id="cantidad"  onkeyup="showHint(this.value,art);calcular();">
+                       <input type="text" id="cantidad"  onkeyup="showHint(this.value,art);calcular();" />
                        <span id="txtHint" style="font-size:12px;"></span>
             
                       </div>
                       <div class="col-lg-2">
-                      <input type="number" min="0" max="100" step="any" id="descuento" onkeyup="calcular();">
+                      <input type="number" min="0" max="100" step="any" value="0" id="descuento" onkeyup="calcular();"/>
                           
                       </div>
                       <div class="col-lg-2">
-                      <input type="text" id="neto" style="font-size:12px;" disabled>
-                       <input type="text" id="netoaux" hidden>
-                       <input type="text" id="subaux" hidden>
+                      <input type="text" id="neto" style="font-size:12px;" disabled/>
+                       <input type="text" id="netoaux" hidden/>
+                       <input type="text" id="subaux" hidden/>
                           
                       </div>
                       <div class="col-lg-2">
-                      <input type="number" id="iva" style="font-size:12px;" disabled>
-                      <input type="text" id="ivaux" hidden>
+                      <input type="number" id="iva" style="font-size:12px;" disabled/>
+                      <input type="text" id="ivaux" hidden/>
                           
                       </div>
                       <div class="col-lg-2">
-                      <input type="number" id="total" disabled>
+                      <input type="number" id="total" disabled/>
                           
                       </div>
                   </div>
@@ -557,7 +571,7 @@ var nextinput = 1;
     function agregar(){
       campo = '<div id="campo'+nextinput+'" name="campo'+nextinput+'" class="row"><div class="col-lg-2"><p id="item'+nextinput+'" class="item" name="item'+nextinput+'"></p><input type="text" id="ref'+nextinput+'" name="ref'+nextinput+'" hidden></input></div><div class="col-lg-2"><input type="text" id="cantidad'+nextinput+'" name="cantidad'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="descuento'+nextinput+'" name="descuento'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="neto'+nextinput+'" name="neto'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="iva'+nextinput+'" name="iva'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="total'+nextinput+'" name="total'+nextinput+'" hidden></div></div>';
 
-      if (document.getElementById("combobox").value !== "" && document.getElementById("cantidad").value !== "") {
+      if (document.getElementById("combobox").value !== "" && document.getElementById("cantidad").value !== "" && document.getElementById("txtHint").innerHTML == "") {
         $("#campos").append(campo);
 
         document.getElementById("item"+nextinput).innerHTML = document.getElementById("cantidad").value  + " x " +  document.getElementById("combobox").value + " " + document.getElementById("neto").value + " " + document.getElementById("iva").value + " " + document.getElementById("total").value;
@@ -579,7 +593,7 @@ var nextinput = 1;
         nextinput++;
 
       }else{
-        window.alert("necesita un producto y una cantidad");
+        window.alert("necesita un producto y una cantidad valida");
       }
 
     }
