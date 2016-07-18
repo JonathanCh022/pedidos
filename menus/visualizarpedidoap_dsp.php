@@ -215,8 +215,8 @@ while ($row = $res1->fetch_assoc()) {
                          <label class=" control-label" for="vendedor" >Cliente : </label>   
                                     <select class="form-control  input-sm" name="cliente" required style="width:20%;">
                                     </select><br>
-                         <input type="submit" value="Continuar" style="color: black;" />
-                        <a href="../menus" style="color: black;"> <button type="button">Cancelar</button></a>
+                         <input class="btn btn-default" type="submit" value="Continuar" style="color: black;" />
+                        <a class="btn btn-default" href="../menus" style="color: black;"> Cancelar</a>
 
                      </form>
                     <!-- /.col-lg-12 -->

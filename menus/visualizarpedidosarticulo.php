@@ -13,10 +13,20 @@
     $vendedor = "2";
     $cliente = "javier"; 
 
-    $sqlpedidoarticulo = "SELECT * FROM pedido_articulos WHERE   pda_numero = '$id' ";
-   
+    $sqlpedidoarticulo = "SELECT * FROM pedido_articulos WHERE   pda_numero = '$id' ";   
     $resultado =  $mysqli->query($sqlpedidoarticulo);
-  
+    $rest=  $mysqli->query($sqlpedidoarticulo);
+      while ($fila = $rest->fetch_assoc()) {       
+        $estado=$fila['pda_estado'];                
+    }
+
+    $estados = [
+    0 => "Reportado",
+    1 => "Aprobado",
+    2 => "Rechazado",
+    3 => "Pendiente"
+    ];    
+    
  
 ?>
 
@@ -243,7 +253,7 @@
                     </div>
                     <div class="panel">
                         <h4>Articulos del Pedido N° <?php echo "$id";?></h4>
-                         <button type="button" name="salir"> <a href="visualizarpedidostabla.php">Regresar</a></button>
+                        <a class="btn btn-default" href="visualizarpedidostabla.php">Regresar</a>
                     </div>
                     <div class="div3">
                     <table>
@@ -271,18 +281,18 @@
                              $resultado2 =  $mysqli->query($sqlinventario);
                               while($row2 = mysqli_fetch_assoc($resultado2)) {
                                 $precio = $row2['inv_precio_vta'];
-                                echo $precio;
-
-                              }
+                                $iva = $row2['inv_porc_iva'];
+                                echo $precio ;
+                                }
                             echo "</td>";
                             echo "<td >";
                             echo $row['pda_descuento']; 
                             echo "</td>";
                             echo "<td >"; 
-                            echo  $precio*$row['pda_cantidad_ped'];
+                            echo  ($precio + $precio*($iva/100)-$row['pda_descuento']/100)*$row['pda_cantidad_ped'];
                             echo "</td>";   
                             echo "<td >"; 
-                            echo $row['pda_estado'];
+                            echo $estados[$estado];
                             echo "</td>";
                             echo "</tr>";   
 

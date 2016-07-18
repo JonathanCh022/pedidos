@@ -318,6 +318,8 @@
                                     $resultado3 =  $mysqli->query($sqlprecio);
                                     while($row3 = mysqli_fetch_assoc($resultado3)) {
                                     $precio = $row3['inv_precio_vta'];
+                                    $iva = $row3['inv_porc_iva'];
+                                    $precio = ($precio + $precio*($iva/100))-$row2['pda_descuento']/100;
                                     $valor = $valor + $precio*$cantidad;
 
                                   }

@@ -41,7 +41,7 @@
 	$resultado=  $mysqli->query($sqlpedidogeneral);
 	$rest=  $mysqli->query($sqlpedidogeneral);
 	  while ($fila = $rest->fetch_assoc()) {       
-		$estado=$fila['pdg_estado'];                
+		$est=$fila['pdg_estado'];                
 	}
 	
 	$estados = [
@@ -292,6 +292,7 @@
 						</tr>
 						<?PHP    
 						$valor =0; 
+						$i = 0;
 							if (mysqli_num_rows($resultado) > 0) {  
 							 while($row = mysqli_fetch_assoc($resultado)) {
 							 $num = $row['pdg_numero'];
@@ -319,22 +320,24 @@
 									$resultado3 =  $mysqli->query($sqlprecio);
 									while($row3 = mysqli_fetch_assoc($resultado3)) {
 									$precio = $row3['inv_precio_vta'];
-									$valor = $valor + $precio*$cantidad;
+									$iva = $row3['inv_porc_iva'];
+                                    $precio = ($precio + $precio*($iva/100))-$row2['pda_descuento']/100;
+                                    $valor = $valor + $precio*$cantidad;
 								  }
 							  }
 							echo $valor;							  
 							echo "</td>";
 							echo "<td >"; ?>
-							<form name="form2" method="post" action="update_estado.php">
+							<form name="form2" method="post" action="update_estado.php" id="form<?php echo $i; ?>">
 							<input type="text" name="nmo_ped" hidden value="<?php echo $num;?>" ></input>
-							<select id="estado" class="form-control  input-sm" name="estado" onchange="myFunction()" style="width:95%;">
+							<select  " class="form-control  input-sm" name="estado" id="estado<?php echo $i; ?>" onchange="myFunction(<?php echo $i;?>)" style="width:95%;" >
 							</select>
 							</form>
 							<?php
 							echo "</td>";
 							echo "</tr>";   
-
-							}
+							$i++;
+							}							
 							} else {
 								echo "NO HAY USUARIOS REGISTRADOS";//login no exitoso
 							}                
@@ -389,32 +392,47 @@
 <InstanceEnd --></html>
 
 <script type="text/javascript">
-	
+	var std = new Array();  
  function est()
 	{           
 			var a = new Array();
-			var std = 0;                       
+			                     
 			var cont = 0;
 			<?php
 			for ($i = 0, $total = count($estados); $i < $total; $i ++) {               
 				echo "\na[$i] = '$estados[$i]';";			   
 			}
-			echo "\nstd = $estado;";
+			for ($i=0 , $total1 = count($est); $i < $total1 ; $i++) { 
+                echo "\nstd[$i] = $est[$i];";
+            }  
 			?>
-			form2.estado.length=0;
-			for (var i = 0; i < a.length; i++) {            
-				opcion1 = new Option(a[i],i);
-				document.forms.form2.estado.options[cont]=opcion1;				
-				cont++;         
-			}
-			document.getElementById("estado").selectedIndex=std;
+			var x = document.forms.length;
+
+			for (var j= 0; j < x; j++) {
+                estado = document.getElementById("form"+j).elements[1].id; 
+                cont = 0;
+                for (var i = 0; i < a.length; i++) {
+                    opcion1 = new Option(a[i],i);                                       
+                    document.getElementById(estado).options[cont]=opcion1;                                 
+                    cont++;                          
+                }
+            }
+
+			for (var i = 0; i < std.length; i++) {               
+               document.getElementById("estado"+i).selectedIndex=std[i];                        
+            }  
+			
 	}
 
 
-function myFunction() {
+function myFunction(val) {
+	
     var r = confirm("Desea realizar esta accion?");
 	if (r == true) {
 		document.form2.submit();
+	}else if(r == false){
+		
+		document.getElementById("estado"+val).selectedIndex=std[val];
 	} 
 }
 

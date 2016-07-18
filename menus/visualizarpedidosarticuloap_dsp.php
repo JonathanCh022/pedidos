@@ -169,14 +169,14 @@
                                 <li>
                                     <a href="visualizarpedidos.php">Visualizar Pedidos</a>
                                 </li>
-                                <li>
-                                    <a href="#">Aprovar/Desaprovar Pedidos</a>
+                                 <li>
+                                    <a href="visualizarpedidoap_dsp.php">Aprobar/Desaprobar Pedidos</a>
                                 </li>
                                 
                                  <li>
-                                    <a href="#">Adicionar Pedido</a>
+                                    <a href="adicionarpedido.php">Adicionar Pedido</a>
                                     <!-- /.nav-third-level -->
-                                </li>
+                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -285,6 +285,7 @@
                              $resultado2 =  $mysqli->query($sqlinventario);
                               while($row2 = mysqli_fetch_assoc($resultado2)) {
                                 $precio = $row2['inv_precio_vta'];
+                                $iva = $row2['inv_porc_iva'];
                                 echo $precio;
 
                               }
@@ -293,7 +294,7 @@
                             echo $row['pda_descuento']; 
                             echo "</td>";
                             echo "<td >"; 
-                            echo  $precio*$row['pda_cantidad_ped'];
+                            echo  ($precio + $precio*($iva/100)-$row['pda_descuento']/100)*$row['pda_cantidad_ped'];
                             echo "</td>";   
                             echo "<td >";?>
                             <form  name="form2" method="post" action="update_estado_art.php"  id="form<?php echo $i; ?>">
@@ -392,11 +393,12 @@
 
 
 <script type="text/javascript">
-    
+    var std = new Array();
+    var glob = 0;
  function est()
     {        
             var a = new Array();
-            var std = new Array();                       
+                                   
             var cont = 0;
             <?php
             echo "\nextform = $i";
@@ -433,23 +435,37 @@ function myFunction(formulario) {
 		var r = confirm("Desea realizar esta accion?");
 		if (r == true  ) {		
 			document.getElementById("formact"+formulario).submit();
-		} 	
-	}else {window.alert("Cantidad no valida.");}
+		} else if(r == false){
+                
+                document.getElementById("estado"+formulario).selectedIndex=std[formulario];
+        }  	
+	}else {
+        window.alert("Cantidad no valida.");
+        }
 }
     
 
 function myFunction2(opc,formulario) {
 	
 	if (opc == 1) {		 
-                $( '#myModal'+formulario ).modal( 'toggle' );            
+                $( '#myModal'+formulario ).modal( 'toggle' );
+                glob = formulario;            
 		}else{ 
 			var t = confirm("Desea realizar esta accion?");
 			if (t == true) {
 				document.getElementById("form"+formulario).submit();								
-			} 
+			} else if(t == false){
+                
+                document.getElementById("estado"+formulario).selectedIndex=std[formulario];
+            }   
 		}
    
 }
+
+$(window).on('hidden.bs.modal', function() { 
+    
+    document.getElementById("estado"+glob).selectedIndex=std[glob];
+});
 
 function validarlogin(error){
     if (error == 1) {
