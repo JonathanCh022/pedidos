@@ -282,14 +282,17 @@
                               while($row2 = mysqli_fetch_assoc($resultado2)) {
                                 $precio = $row2['inv_precio_vta'];
                                 $iva = $row2['inv_porc_iva'];
-                                echo $precio ;
+                                $precio = $precio + $precio*$iva/100;
+                                echo $precio;
+
                                 }
                             echo "</td>";
                             echo "<td >";
                             echo $row['pda_descuento']; 
                             echo "</td>";
                             echo "<td >"; 
-                            echo  ($precio + $precio*($iva/100)-$row['pda_descuento']/100)*$row['pda_cantidad_ped'];
+                            $neto = $precio - $row['pda_descuento']/100;
+                            echo $neto ;
                             echo "</td>";   
                             echo "<td >"; 
                             echo $estados[$estado];

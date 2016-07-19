@@ -286,6 +286,7 @@
                               while($row2 = mysqli_fetch_assoc($resultado2)) {
                                 $precio = $row2['inv_precio_vta'];
                                 $iva = $row2['inv_porc_iva'];
+                                $precio = $precio + $precio*$iva/100;
                                 echo $precio;
 
                               }
@@ -294,7 +295,7 @@
                             echo $row['pda_descuento']; 
                             echo "</td>";
                             echo "<td >"; 
-                            echo  ($precio + $precio*($iva/100)-$row['pda_descuento']/100)*$row['pda_cantidad_ped'];
+                            echo $neto = $precio -$row['pda_descuento']/100;
                             echo "</td>";   
                             echo "<td >";?>
                             <form  name="form2" method="post" action="update_estado_art.php"  id="form<?php echo $i; ?>">
