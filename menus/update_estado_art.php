@@ -1,4 +1,12 @@
 <?php 
+error_reporting(0);
+ini_set('display_errors', 0);
+header("Content-Type: text/html;charset=utf-8");
+    session_start();
+    if (!isset($_SESSION['usu_nit']) || $_SESSION['usu_rol']!== '0') {
+       header('Location: /pedidos/index.php?errorusuario=si');
+       exit();
+    }
 include '../conexion.php';
 $id = $_POST['id'];
 if (isset($_POST['estado'])) {

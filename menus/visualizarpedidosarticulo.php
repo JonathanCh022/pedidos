@@ -1,8 +1,15 @@
 <?php 
+error_reporting(0);
+ini_set('display_errors', 0);
+header("Content-Type: text/html;charset=utf-8");
+    session_start();
+    if (!isset($_SESSION['usu_nit'])) {
+       header('Location: /pedidos/index.php?errorusuario=si');
+       exit();
+    }
     
     $id= $_GET["id"];
     include '../conexion.php';
-    session_start();
   /*  $fechaInicio =date("Y-m-d ", strtotime($_POST['fechainicial'])) ;
     $fechaFinal =date("Y-m-d ", strtotime($_POST['fechafinal'])) ;
     $vendedor = $_POST['vendedor'];
@@ -125,25 +132,6 @@
             </div>
             <!-- /.navbar-header -->
 
-            <ul class="nav navbar-top-links navbar-right">
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href=""><i class="fa fa-user fa-fw"></i> Opcion 1</a>
-                        </li>
-                        <li><a href=""><i class="fa fa-gear fa-fw"></i> Opcion 2</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href=""><i class="fa fa-sign-out fa-fw"></i> Salir</a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-user -->
-                </li>
-                <!-- /.dropdown -->
-            </ul>
             <!-- /.navbar-top-links -->
 
             <div class="navbar-default sidebar" role="navigation">
@@ -168,14 +156,17 @@
                                 <li>
                                     <a href="visualizarpedidos.php">Visualizar Pedidos</a>
                                 </li>
+                                 <?php if($_SESSION['usu_rol'] == 0){ ?>
                                 <li>
-                                    <a href="#">Aprovar/Desaprovar Pedidos</a>
+                                    <a href="visualizarpedidoap_dsp.php">Aprovar/Desaprovar Pedidos</a>
                                 </li>
-                                
+                                 <?php } ?>
+                                <?php if($_SESSION['usu_rol'] == 1){ ?>
                                  <li>
-                                    <a href="#">Adicionar Pedido</a>
+                                    <a href="adicionarpedido.php">Adicionar Pedido</a>
                                     <!-- /.nav-third-level -->
                                 </li>
+                                <?php } ?>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>

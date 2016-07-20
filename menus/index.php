@@ -3,6 +3,10 @@ error_reporting(0);
 ini_set('display_errors', 0);
 header("Content-Type: text/html;charset=utf-8");
     session_start();
+    if (!isset($_SESSION['usu_nit'])) {
+       header('Location: /pedidos/index.php?errorusuario=si');
+       exit();
+    }
 ?>
 
 
@@ -84,14 +88,17 @@ header("Content-Type: text/html;charset=utf-8");
                                 <li>
                                     <a href="visualizarpedidos.php">Visualizar Pedidos</a>
                                 </li>
+                                 <?php if($_SESSION['usu_rol'] == 0){ ?>
                                 <li>
                                     <a href="visualizarpedidoap_dsp.php">Aprovar/Desaprovar Pedidos</a>
                                 </li>
-                                
+                                 <?php } ?>
+                                <?php if($_SESSION['usu_rol'] == 1){ ?>
                                  <li>
                                     <a href="adicionarpedido.php">Adicionar Pedido</a>
                                     <!-- /.nav-third-level -->
                                 </li>
+                                <?php } ?>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>

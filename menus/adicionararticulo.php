@@ -1,7 +1,12 @@
 <?php
-  error_reporting(0);
-  ini_set('display_errors', 0);
-  header("Content-Type: text/html;charset=utf-8");
+error_reporting(0);
+ini_set('display_errors', 0);
+header("Content-Type: text/html;charset=utf-8");
+    session_start();
+    if (!isset($_SESSION['usu_nit']) || $_SESSION['usu_rol']!== '1') {
+       header('Location: /pedidos/index.php?errorusuario=si');
+       exit();
+    }
   include '../conexion.php';
   $sqlinv = "SELECT *  FROM inventario";
   $res = $mysqli->query($sqlinv);
@@ -60,6 +65,7 @@
   }
   .item{
     white-space: nowrap;
+    font-size: 24px;
   }
   .totals{
     width: 40%;
@@ -271,6 +277,7 @@
         window.alert("Debe ingrear almenos un articulo");
         return false;
       }else{
+        window.onbeforeunload = null;
         return true;
        // return false to cancel form action
       }
@@ -300,25 +307,6 @@
             </div>
             <!-- /.navbar-header -->
 
-            <ul class="nav navbar-top-links navbar-right">
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href=""><i class="fa fa-user fa-fw"></i> Opcion 1</a>
-                        </li>
-                        <li><a href=""><i class="fa fa-gear fa-fw"></i> Opcion 2</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href=""><i class="fa fa-sign-out fa-fw"></i> Salir</a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-user -->
-                </li>
-                <!-- /.dropdown -->
-            </ul>
             <!-- /.navbar-top-links -->
 
             <div class="navbar-default sidebar" role="navigation">
@@ -343,14 +331,17 @@
                                 <li>
                                     <a href="visualizarpedidos.php">Visualizar Pedidos</a>
                                 </li>
+                                 <?php if($_SESSION['usu_rol'] == 0){ ?>
                                 <li>
-                                    <a href="#">Aprovar/Desaprovar Pedidos</a>
+                                    <a href="visualizarpedidoap_dsp.php">Aprovar/Desaprovar Pedidos</a>
                                 </li>
-                                
+                                 <?php } ?>
+                                <?php if($_SESSION['usu_rol'] == 1){ ?>
                                  <li>
-                                    <a href="#">Adicionar Pedido</a>
+                                    <a href="adicionarpedido.php">Adicionar Pedido</a>
                                     <!-- /.nav-third-level -->
                                 </li>
+                                <?php } ?>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
@@ -439,7 +430,7 @@
                           
                       </div>
                       <div class="col-lg-2">
-                      <button type="button"> modificar </button>
+                     <!-- <button type="button"> modificar </button>-->
                           
                       </div>
                       <div class="col-lg-2">
@@ -567,6 +558,11 @@
 </body>
 <InstanceEnd --></html>
 <script type="text/javascript">
+window.onbeforeunload = confirmExit;
+  function confirmExit()
+  {
+    return "Advertencia";
+  }
 var nextinput = 1;  
     function agregar(){
       campo = '<div id="campo'+nextinput+'" name="campo'+nextinput+'" class="row"><div class="col-lg-2"><p id="item'+nextinput+'" class="item" name="item'+nextinput+'"></p><input type="text" id="ref'+nextinput+'" name="ref'+nextinput+'" hidden></input></div><div class="col-lg-2"><input type="text" id="cantidad'+nextinput+'" name="cantidad'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="descuento'+nextinput+'" name="descuento'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="neto'+nextinput+'" name="neto'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="iva'+nextinput+'" name="iva'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="total'+nextinput+'" name="total'+nextinput+'" hidden></div></div>';
@@ -574,7 +570,7 @@ var nextinput = 1;
       if (document.getElementById("combobox").value !== "" && document.getElementById("cantidad").value !== "" && document.getElementById("txtHint").innerHTML == "") {
         $("#campos").append(campo);
 
-        document.getElementById("item"+nextinput).innerHTML = document.getElementById("cantidad").value  + " x " +  document.getElementById("combobox").value + " " + document.getElementById("neto").value + " " + document.getElementById("iva").value + " " + document.getElementById("total").value;
+        document.getElementById("item"+nextinput).innerHTML = document.getElementById("cantidad").value  + " x " +  document.getElementById("combobox").value + " $" + document.getElementById("total").value;
         document.getElementById("ref"+nextinput).value = document.getElementById("combobox").value;
         document.getElementById("combobox").value = "";
         document.getElementById("cantidad"+nextinput).value = document.getElementById("cantidad").value;
