@@ -24,7 +24,7 @@ header("Content-Type: text/html;charset=utf-8");
     $resultado =  $mysqli->query($sqlpedidoarticulo);
     $rest=  $mysqli->query($sqlpedidoarticulo);
       while ($fila = $rest->fetch_assoc()) {       
-        $estado=$fila['pda_estado'];                
+        $estado[]=$fila['pda_estado'];                
     }
 
     $estados = [
@@ -58,6 +58,10 @@ header("Content-Type: text/html;charset=utf-8");
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
+    <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script> 
+    <link href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/template01/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -158,7 +162,7 @@ header("Content-Type: text/html;charset=utf-8");
                                 </li>
                                  <?php if($_SESSION['usu_rol'] == 0){ ?>
                                 <li>
-                                    <a href="visualizarpedidoap_dsp.php">Aprovar/Desaprovar Pedidos</a>
+                                    <a href="visualizarpedidoap_dsp.php">Aprobar/Desaprobar Pedidos</a>
                                 </li>
                                  <?php } ?>
                                 <?php if($_SESSION['usu_rol'] == 1){ ?>
@@ -247,16 +251,20 @@ header("Content-Type: text/html;charset=utf-8");
                         <a class="btn btn-default" href="visualizarpedidostabla.php">Regresar</a>
                     </div>
                     <div class="div3">
-                    <table>
-                        <tr class="trtit">                    
-                            <td style="height: 10px;" class="clwhite">Articulo</td>
-                            <td style="height: 10px;" class="clwhite">Cantidad</td>
-                            <td style="height: 10px;" class="clwhite">Valor</td>
-                            <td style="height: 10px;" class="clwhite">Descuento</td>
-                            <td style="height: 10px;" class="clwhite">Neto</td>
-                            <td style="height: 10px;" class="clwhite">Estado</td>
-                        </tr>
-                        <?PHP     
+                    <table id="pedidos" class="w3-table w3-striped w3-bordered w3-border w3-tiny w3-hoverable table  table-bordered">
+                        <thead>
+                            <tr class="trtit">                    
+                                <td style="height: 10px;" class="clwhite">Articulo</td>
+                                <td style="height: 10px;" class="clwhite">Cantidad</td>
+                                <td style="height: 10px;" class="clwhite">Valor</td>
+                                <td style="height: 10px;" class="clwhite">Descuento</td>
+                                <td style="height: 10px;" class="clwhite">Neto</td>
+                                <td style="height: 10px;" class="clwhite">Estado</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?PHP 
+                            $i = 0;    
                             if (mysqli_num_rows($resultado) > 0) {  
                              while($row = mysqli_fetch_assoc($resultado)) {
                             echo "<tr>";
@@ -286,17 +294,18 @@ header("Content-Type: text/html;charset=utf-8");
                             echo $neto ;
                             echo "</td>";   
                             echo "<td >"; 
-                            echo $estados[$estado];
+                            echo $estados[$estado[$i]];
                             echo "</td>";
                             echo "</tr>";   
-
+                            $i++;
                             }
                             } else {
                                 echo "NO HAY USUARIOS REGISTRADOS";//login no exitoso
                             }                
                            
                             
-                        ?> 
+                        ?>
+                    <tbody> 
                     </table>
                 </div>
               </div>
@@ -324,3 +333,8 @@ header("Content-Type: text/html;charset=utf-8");
     <script src="../bootstrap/template01/dist/js/sb-admin-2.js"></script> 
 </body>
 <InstanceEnd --></html>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#pedidos').DataTable();
+    } );
+</script>

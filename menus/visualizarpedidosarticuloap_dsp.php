@@ -59,6 +59,10 @@ header("Content-Type: text/html;charset=utf-8");
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
+    <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script> 
+    <link href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
      <!-- <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script> -->
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/template01/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -160,7 +164,7 @@ header("Content-Type: text/html;charset=utf-8");
                                 </li>
                                  <?php if($_SESSION['usu_rol'] == 0){ ?>
                                 <li>
-                                    <a href="visualizarpedidoap_dsp.php">Aprovar/Desaprovar Pedidos</a>
+                                    <a href="visualizarpedidoap_dsp.php">Aprobar/Desaprobar Pedidos</a>
                                 </li>
                                  <?php } ?>
                                 <?php if($_SESSION['usu_rol'] == 1){ ?>
@@ -249,15 +253,18 @@ header("Content-Type: text/html;charset=utf-8");
                           <a href="aprobar_desaprobar.php" class="btn btn-default">Regresar</a>
                     </div>
                     <div class="div3">
-                    <table>
-                        <tr class="trtit">                    
-                            <td style="height: 10px;" class="clwhite">Articulo</td>
-                            <td style="height: 10px;" class="clwhite">Cantidad</td>
-                            <td style="height: 10px;" class="clwhite">Valor</td>
-                            <td style="height: 10px;" class="clwhite">Descuento</td>
-                            <td style="height: 10px;" class="clwhite">Neto</td>
-                            <td style="height: 10px;" class="clwhite">Estado</td>
-                        </tr>
+                    <table id="pedidos" class="w3-table w3-striped w3-bordered w3-border w3-tiny w3-hoverable table  table-bordered">
+                        <thead>
+                            <tr class="trtit">                    
+                                <td style="height: 10px;" class="clwhite">Articulo</td>
+                                <td style="height: 10px;" class="clwhite">Cantidad</td>
+                                <td style="height: 10px;" class="clwhite">Valor</td>
+                                <td style="height: 10px;" class="clwhite">Descuento</td>
+                                <td style="height: 10px;" class="clwhite">Neto</td>
+                                <td style="height: 10px;" class="clwhite">Estado</td>
+                            </tr>
+                        </thead>
+                        <tbody>
                         <?PHP     
                             $i = 0;
                             if (mysqli_num_rows($resultado) > 0) {  
@@ -291,40 +298,40 @@ header("Content-Type: text/html;charset=utf-8");
                             echo "</td>";   
                             echo "<td >";?>
                             <form  name="form2" method="post" action="update_estado_art.php"  id="form<?php echo $i; ?>">
-                            <input type="text" name="nmo_ped" hidden value="<?php echo $num;?>" ></input>
-                            <select class="form-control  input-sm" onchange="myFunction2(this.value,<?php echo $i; ?>)" style="width:95%;" name="estado" id="estado<?php echo $i; ?>" >                                
-                            </select>
-                            <input type="text" name="ref_ped" hidden value="<?php echo $referenc;?>" ></input>
-                            <input type="text" name="id" hidden value="<?php echo $id;?>" ></input>
+                                <input type="text" name="nmo_ped" hidden value="<?php echo $num;?>" ></input>
+                                <select class="form-control  input-sm" onchange="myFunction2(this.value,<?php echo $i; ?>)" style="width:95%;" name="estado" id="estado<?php echo $i; ?>" >                                
+                                </select>
+                                <input type="text" name="ref_ped" hidden value="<?php echo $referenc;?>" ></input>
+                                <input type="text" name="id" hidden value="<?php echo $id;?>" ></input>
                             </form>
 
-                             <div id="myModal<?php echo $i; ?>" class="modal fade" role="dialog">
-						      <div class="modal-dialog " style="width: 27%; ">
+                            <div id="myModal<?php echo $i; ?>" class="modal fade" role="dialog">
+    						    <div class="modal-dialog " style="width: 27%; ">
 
-						        <!-- Modal content-->
-						        <div class="modal-content">
-						          <div class="modal-header">
-						                <button type="button" class="close" data-dismiss="modal">&times;</button>
-						          </div>
-						          <div id="light" class="modal-body" style="background-color:#f5f5f0; ">
-						               <div class="panel ">
-						                    <div class="panel-body ">
-						                   		<form name="formact" method="POST" autocomplete="off" action="update_estado_art.php" id="formact<?php echo $i; ?>">
-							                   		<input type="text" name="ref_ped"  hidden value="<?php echo $referenc;?>" ></input>
-					                            	<input type="text" name="id" hidden value="<?php echo $id;?>" ></input>
-					                            	<input type="text" name="nmo_ped" hidden value="<?php echo $num;?>" ></input>
-							                        <label class="control-label">Cantidad:</label>
-							                        <input type="text" name="cant" maxlength="7" class="form-control" onkeyup="autocomp(<?php echo $i; ?> , this.value, '<?php echo $referenc;?>' )"><span id="txtHint<?php echo $i; ?>" style="font-size:12px;"></span><br>
-							                        <label class="control-label">Descuento:</label>
-							                        <input type="text" name="desc" class="form-control" maxlength="2"><br>
-							                        <input type="button" name="sbt" onclick="myFunction(<?php echo $i; ?>)" value="Actualizar" class="btn btn-default">
-						                        </form>
-						                    </div>              
-						                </div>                
-						          </div>          
-						        </div>
+    						        <!-- Modal content-->
+    						        <div class="modal-content">
+    						          <div class="modal-header">
+    						                <button type="button" class="close" data-dismiss="modal">&times;</button>
+    						          </div>
+    						          <div id="light" class="modal-body" style="background-color:#f5f5f0; ">
+    						               <div class="panel ">
+    						                    <div class="panel-body ">
+    						                   		<form name="formact" method="POST" autocomplete="off" action="update_estado_art.php" id="formact<?php echo $i; ?>">
+    							                   		<input type="text" name="ref_ped"  hidden value="<?php echo $referenc;?>" ></input>
+    					                            	<input type="text" name="id" hidden value="<?php echo $id;?>" ></input>
+    					                            	<input type="text" name="nmo_ped" hidden value="<?php echo $num;?>" ></input>
+    							                        <label class="control-label">Cantidad:</label>
+    							                        <input type="text" name="cant" maxlength="7" class="form-control" onkeyup="autocomp(<?php echo $i; ?> , this.value, '<?php echo $referenc;?>' )"><span id="txtHint<?php echo $i; ?>" style="font-size:12px;"></span><br>
+    							                        <label class="control-label">Descuento:</label>
+    							                        <input type="text" name="desc" class="form-control" maxlength="2"><br>
+    							                        <input type="button" name="sbt" onclick="myFunction(<?php echo $i; ?>)" value="Actualizar" class="btn btn-default">
+    						                        </form>
+    						                    </div>              
+    						                </div>                
+    						          </div>          
+    						        </div>
 
-						      </div>
+    						     </div>
 						    </div>  
                             <?php
                             echo "</td>";
@@ -337,6 +344,7 @@ header("Content-Type: text/html;charset=utf-8");
                            
                             
                         ?> 
+                        <tbody>
                     </table>
                 </div>
               </div>
@@ -483,6 +491,10 @@ function validarlogin(error){
             document.getElementById("txtHint"+div).innerHTML = data;
         });
     }
+
+    $(document).ready(function() {
+        $('#pedidos').DataTable();
+    } );
 
 
 		

@@ -81,6 +81,10 @@ header("Content-Type: text/html;charset=utf-8");
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
 	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
+    <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script> 
+    <link href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 	<!-- Bootstrap Core CSS -->
 	<link href="../bootstrap/template01/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -182,7 +186,7 @@ header("Content-Type: text/html;charset=utf-8");
                                 </li>
                                  <?php if($_SESSION['usu_rol'] == 0){ ?>
                                 <li>
-                                    <a href="visualizarpedidoap_dsp.php">Aprovar/Desaprovar Pedidos</a>
+                                    <a href="visualizarpedidoap_dsp.php">Aprobar/Desaprobar Pedidos</a>
                                 </li>
                                  <?php } ?>
                                 <?php if($_SESSION['usu_rol'] == 1){ ?>
@@ -272,15 +276,18 @@ header("Content-Type: text/html;charset=utf-8");
 						 <a href="cerrarsesion.php" class="btn btn-default">Salir</a>
 					</div>
 					<div class="div3">
-					<table>
-						<tr class="trtit">                    
-							<th style="height: 10px;" class="clwhite">Nro</th>
-							<th style="height: 10px;" class="clwhite">Fecha</th>
-							<th style="height: 10px;" class="clwhite">Cliente</th>
-							<th style="height: 10px;" class="clwhite">Vendedor</th>
-							<th style="height: 10px;" class="clwhite">Valor</th>
-							<th style="height: 10px;" class="clwhite">Estado</th>
-						</tr>
+					<table id="pedidos" class="w3-table w3-striped w3-bordered w3-border w3-tiny w3-hoverable table  table-bordered">
+						<thead>
+							<tr class="trtit">                    
+								<th style="height: 10px;" class="clwhite">Nro</th>
+								<th style="height: 10px;" class="clwhite">Fecha</th>
+								<th style="height: 10px;" class="clwhite">Cliente</th>
+								<th style="height: 10px;" class="clwhite">Vendedor</th>
+								<th style="height: 10px;" class="clwhite">Valor</th>
+								<th style="height: 10px;" class="clwhite">Estado</th>
+							</tr>
+						</thead>
+						<tbody>
 						<?PHP    
 						$valor =0; 
 						$i = 0;
@@ -335,6 +342,7 @@ header("Content-Type: text/html;charset=utf-8");
 						   
 							
 						?> 
+						<tbody>
 					</table>
 				</div>
 			  </div>
@@ -434,5 +442,9 @@ function validarlogin(error){
             });
            }
         }
+
+$(document).ready(function() {
+        $('#pedidos').DataTable();
+    } );
 
 </script>
