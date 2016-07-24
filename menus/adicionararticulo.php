@@ -63,12 +63,13 @@ header("Content-Type: text/html;charset=utf-8");
     width: 20%;
     height: auto;
   }
-  .item{
-    white-space: nowrap;
-    font-size: 24px;
+  .items{
+        border-style: none;
+        background: none;
+ 
   }
   .totals{
-    width: 40%;
+    width: 10%;
     height: auto;
     border-style: none;
   }
@@ -96,6 +97,77 @@ header("Content-Type: text/html;charset=utf-8");
     border-style: inset;
     border-width: 1px;
 }
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 20%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+        .clwhite{
+            color: white;
+            height: 10px;
+        }
+
+        .trtit{
+            background-color:#1a75ff;
+        }
+
+        table {
+            overflow:hidden;
+            border:1px solid #d3d3d3;
+            background:#fefefe;
+            width:70%;
+            margin:5% auto 0;
+            -moz-border-radius:5px; /* FF1+ */
+            -webkit-border-radius:5px; /* Saf3-4 */
+            border-radius:5px;
+            -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+            -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+        }
+        th {
+            padding:18px 28px 18px; 
+            text-align:center; 
+            padding-top:22px;            
+            border-top:1px solid #e0e0e0;  
+            border-right:1px solid #e0e0e0;          
+        }
+        td {padding:8px 28px 8px; 
+            text-align:center; 
+            border-top:1px solid #e0e0e0; 
+            border-right:1px solid #e0e0e0;}
 </style>
   <!--  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
   <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
@@ -425,104 +497,68 @@ header("Content-Type: text/html;charset=utf-8");
                         <!-- /.col-lg-12 -->
                         <!-- InstanceEndEditable -->
                   <div class="row">
-                      <div class="col-lg-2">
-                      <button type="button" id="adicionar" onclick="agregar();">adicionar </button>
+                      <div class="col-lg-12">
+                      
+                      <!-- Trigger/Open The Modal -->
+                      <button type="button" id="myBtn" >Agragar Articulo</button>
                           
-                      </div>
-                      <div class="col-lg-2">
-                     <!-- <button type="button"> modificar </button>-->
-                          
-                      </div>
-                      <div class="col-lg-2">
+
+                     <button type="button"> modificar </button>
+
                       <button type="button" onclick="borrar();"> borrar </button>
-                          
-                      </div>
-                      <div class="col-lg-2">
+
                       <button type="submit" > terminar </button>
                           
-                      </div>
-                      <div class="col-lg-2">
                       <a href="adicionarpedido.php"> <button type="button">cancelar </button></a>
                           
                       </div>
                   </div>
+                  <hr>
 
                     
-                  <div class="row">
-                    <div class="col-lg-2">
-                    Referencia
-                        
-                    </div>
-                    <div class="col-lg-2">
-                    Cantidad
-               <!--       <input type="text" onkeyup="showHint(this.value)">
-                    <span id="txtHint" style="font-size:12px;"></span>
-
-            -->  
-                    </div>
-                    <div class="col-lg-2">
-                    Descuento
-                        
-                    </div>
-                    <div class="col-lg-2">
-                    Neto
-                        
-                    </div>
-                    <div class="col-lg-2">
-                    Iva
-                        
-                    </div>
-                    <div class="col-lg-2">
-                    Total
-                        
-                    </div>
-                  </div>
+                      <table id="campos">
+                        <tr class="trtit">                    
+                            <th class="clwhite">Referencia</th>
+                            <th class="clwhite">Cantidad</th>
+                            <th class="clwhite">Descuento</th>
+                            <th class="clwhite">Neto</th>
+                            <th class="clwhite">Iva</th>
+                            <th class="clwhite">Total</th>
+                        </tr>
+                        </table>
                     <!-- /.row -->
 
-
-                  <div class="row">
-                      <div class="col-lg-2">
                    <!--     <input type="text" onkeyup="showHint2(this.value,1)">
-                      <span id="txtHint1" style="font-size:12px;"></span>
-                          -->
-                      <select id="combobox" name="combobox" ></select>
+                      <span id="txtHint1" style="font-size:12px;"></span>-->
+                      <div id="myModal" class="modal">
+                        <!-- Modal content -->
+                        <div class="modal-content" >
+                          <span class="close" >×</span>
+                          <div style="">
+                        <label>Referencia: </label><select id="combobox" name="combobox" ></select><br><br>
+                           <label>Cantidad: </label><input type="text" id="cantidad"  onkeyup="showHint(this.value,art);calcular();" style="width:30%;" /><br>
+                       <span id="txtHint" style="font-size:12px;"></span><br>
+                        <label>Descuento: </label><input type="number" min="0" max="100" step="any" value="0" id="descuento" onkeyup="calcular();" style="width:30%;"/><br><br>
+                        <label>Neto: </label><input type="text" id="neto" style="font-size:12px;width:30%;"  disabled/><br>
+                       <input type="text" id="netoaux" hidden/>
+                       <input type="text" id="subaux" hidden/><br>
+                          <label>Iva: </label><input type="number" id="iva" style="font-size:12px;width:30%;" disabled/><br>
+                      <input type="text" id="ivaux" hidden/><br>
+                     <label>Total: </label><input type="number" id="total" disabled style="width:30%;"/><br><br>
+                      <button type="button" id="adicionar" onclick="agregar();">Confirmar </button>
+                      </div>
+                        </div>
 
                       </div>
-                      <div class="col-lg-2">
-                       <input type="text" id="cantidad"  onkeyup="showHint(this.value,art);calcular();" />
-                       <span id="txtHint" style="font-size:12px;"></span>
-            
-                      </div>
-                      <div class="col-lg-2">
-                      <input type="number" min="0" max="100" step="any" value="0" id="descuento" onkeyup="calcular();"/>
-                          
-                      </div>
-                      <div class="col-lg-2">
-                      <input type="text" id="neto" style="font-size:12px;" disabled/>
-                       <input type="text" id="netoaux" hidden/>
-                       <input type="text" id="subaux" hidden/>
-                          
-                      </div>
-                      <div class="col-lg-2">
-                      <input type="number" id="iva" style="font-size:12px;" disabled/>
-                      <input type="text" id="ivaux" hidden/>
-                          
-                      </div>
-                      <div class="col-lg-2">
-                      <input type="number" id="total" disabled/>
-                          
-                      </div>
-                  </div>
+<!-- The Modal -->
 
 
         <!-- /.row -->
 
               </div>
-              <hr>
+              
               <div style="display:flex; flex-direction: row">
-                <div id="campos" style="flex:4;">
-                  
-                </div>
+                
                 <div id="derecha" style="flex:1;">
                 <label>Subtotal: </label><input type="number" id="subt" value="0" class="totals" name="subt" disabled /><br>
                  <label>Iva: </label><input type="number" id="ivat" value="0" class="totals" name="ivat" disabled /><br>
@@ -558,6 +594,31 @@ header("Content-Type: text/html;charset=utf-8");
 </body>
 <InstanceEnd --></html>
 <script type="text/javascript">
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 window.onbeforeunload = confirmExit;
   function confirmExit()
   {
@@ -565,12 +626,12 @@ window.onbeforeunload = confirmExit;
   }
 var nextinput = 1;  
     function agregar(){
-      campo = '<div id="campo'+nextinput+'" name="campo'+nextinput+'" class="row"><div class="col-lg-2"><p id="item'+nextinput+'" class="item" name="item'+nextinput+'"></p><input type="text" id="ref'+nextinput+'" name="ref'+nextinput+'" hidden></input></div><div class="col-lg-2"><input type="text" id="cantidad'+nextinput+'" name="cantidad'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="descuento'+nextinput+'" name="descuento'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="neto'+nextinput+'" name="neto'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="iva'+nextinput+'" name="iva'+nextinput+'" hidden></div><div class="col-lg-2"><input type="text" id="total'+nextinput+'" name="total'+nextinput+'" hidden></div></div>';
+      campo = '<tr id="campo'+nextinput+'" name="campo'+nextinput+'" ><th><p id="item'+nextinput+'" class="item" name="item'+nextinput+'"></p><input type="text" id="ref'+nextinput+'" name="ref'+nextinput+'" class="items" disabled></input></th><th><input type="text" id="cantidad'+nextinput+'" name="cantidad'+nextinput+'" class="items" disabled></th><th><input type="text" id="descuento'+nextinput+'" name="descuento'+nextinput+'" class="items" disabled></th><th><input type="text" id="neto'+nextinput+'" name="neto'+nextinput+'" class="items" disabled></th><th><input type="text" id="iva'+nextinput+'" name="iva'+nextinput+'" class="items" disabled></th><th><input type="text" id="total'+nextinput+'" name="total'+nextinput+'" class="items" disabled></th></tr>';
 
       if (document.getElementById("combobox").value !== "" && document.getElementById("cantidad").value !== "" && document.getElementById("txtHint").innerHTML == "") {
         $("#campos").append(campo);
 
-        document.getElementById("item"+nextinput).innerHTML = document.getElementById("cantidad").value  + " x " +  document.getElementById("combobox").value + " $" + document.getElementById("total").value;
+       // document.getElementById("item"+nextinput).innerHTML = document.getElementById("cantidad").value  + " x " +  document.getElementById("combobox").value + " $" + document.getElementById("total").value;
         document.getElementById("ref"+nextinput).value = document.getElementById("combobox").value;
         document.getElementById("combobox").value = "";
         document.getElementById("cantidad"+nextinput).value = document.getElementById("cantidad").value;
