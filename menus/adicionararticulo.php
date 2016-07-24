@@ -34,6 +34,10 @@ header("Content-Type: text/html;charset=utf-8");
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> 
+    <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script> 
+    <link href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/template01/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -500,31 +504,35 @@ header("Content-Type: text/html;charset=utf-8");
                       <div class="col-lg-12">
                       
                       <!-- Trigger/Open The Modal -->
-                      <button type="button" id="myBtn" >Agragar Articulo</button>
+                      <button type="button" id="myBtn" class="btn btn-default" >Agregar Articulo</button>
                           
 
-                     <button type="button"> modificar </button>
+                     <button type="button" class="btn btn-default" > modificar </button>
 
-                      <button type="button" onclick="borrar();"> borrar </button>
+                      <button type="button" onclick="borrar();" class="btn btn-default" > borrar </button>
 
-                      <button type="submit" > terminar </button>
+                      <button type="submit" class="btn btn-default" > terminar </button>
                           
-                      <a href="adicionarpedido.php"> <button type="button">cancelar </button></a>
+                      <a href="adicionarpedido.php" class="btn btn-default" > cancelar </a>
                           
                       </div>
                   </div>
                   <hr>
 
                     
-                      <table id="campos">
-                        <tr class="trtit">                    
-                            <th class="clwhite">Referencia</th>
-                            <th class="clwhite">Cantidad</th>
-                            <th class="clwhite">Descuento</th>
-                            <th class="clwhite">Neto</th>
-                            <th class="clwhite">Iva</th>
-                            <th class="clwhite">Total</th>
-                        </tr>
+                      <table id="campos" class="w3-table w3-striped w3-bordered w3-border w3-tiny w3-hoverable table  table-bordered">
+                        <thead>
+                          <tr class="trtit">                    
+                              <th class="clwhite">Referencia</th>
+                              <th class="clwhite">Cantidad</th>
+                              <th class="clwhite">Descuento</th>
+                              <th class="clwhite">Neto</th>
+                              <th class="clwhite">Iva</th>
+                              <th class="clwhite">Total</th>
+                          </tr>
+                        </thead> 
+                        <tbody>
+                        </tbody> 
                         </table>
                     <!-- /.row -->
 
@@ -629,7 +637,7 @@ var nextinput = 1;
       campo = '<tr id="campo'+nextinput+'" name="campo'+nextinput+'" ><th><p id="item'+nextinput+'" class="item" name="item'+nextinput+'"></p><input type="text" id="ref'+nextinput+'" name="ref'+nextinput+'" class="items" disabled></input></th><th><input type="text" id="cantidad'+nextinput+'" name="cantidad'+nextinput+'" class="items" disabled></th><th><input type="text" id="descuento'+nextinput+'" name="descuento'+nextinput+'" class="items" disabled></th><th><input type="text" id="neto'+nextinput+'" name="neto'+nextinput+'" class="items" disabled></th><th><input type="text" id="iva'+nextinput+'" name="iva'+nextinput+'" class="items" disabled></th><th><input type="text" id="total'+nextinput+'" name="total'+nextinput+'" class="items" disabled></th></tr>';
 
       if (document.getElementById("combobox").value !== "" && document.getElementById("cantidad").value !== "" && document.getElementById("txtHint").innerHTML == "") {
-        $("#campos").append(campo);
+         $("#campos tbody").append(campo)
 
        // document.getElementById("item"+nextinput).innerHTML = document.getElementById("cantidad").value  + " x " +  document.getElementById("combobox").value + " $" + document.getElementById("total").value;
         document.getElementById("ref"+nextinput).value = document.getElementById("combobox").value;
@@ -731,4 +739,13 @@ var nextinput = 1;
                 cont++;         
             }
     }
+
+    
+    $(document).ready(function() {
+        $('#campos').DataTable({
+          "ordering": false,
+          "info":     false,
+           "filter": false 
+        });
+    } );
 </script>
