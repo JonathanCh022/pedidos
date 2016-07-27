@@ -38,6 +38,7 @@ header("Content-Type: text/html;charset=utf-8");
     <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script> 
     <link href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+
     <!-- Bootstrap Core CSS -->
     <link href="../bootstrap/template01/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -57,6 +58,8 @@ header("Content-Type: text/html;charset=utf-8");
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+
+
 
     <style type="text/css">
   input{
@@ -102,7 +105,7 @@ header("Content-Type: text/html;charset=utf-8");
     border-width: 1px;
 }
 .modal {
-    display: none; /* Hidden by default */
+    display: none; /* by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
     padding-top: 100px; /* Location of the box */
@@ -314,8 +317,7 @@ header("Content-Type: text/html;charset=utf-8");
                 select: function (event, ui) {
                   art = this.value;
                   //window.alert(this.value);
-                   articulo(this.value);//ejecucion 
-                   
+                   articulo(this.value);//ejecucion y calcular
                 }
             });
     $( "#toggle" ).on( "click", function() {
@@ -349,7 +351,7 @@ header("Content-Type: text/html;charset=utf-8");
     }
     $(function() {
     $('#form1').submit(function() {
-      if (nextinput==1) {
+      if ($('#campos tr').length < 2) {
         window.alert("Debe ingrear almenos un articulo");
         return false;
       }else{
@@ -506,11 +508,6 @@ header("Content-Type: text/html;charset=utf-8");
                       <!-- Trigger/Open The Modal -->
                       <button type="button" id="myBtn" class="btn btn-default" >Agregar Articulo</button>
                           
-
-                     <button type="button" class="btn btn-default" > modificar </button>
-
-                      <button type="button" onclick="borrar();" class="btn btn-default" > borrar </button>
-
                       <button type="submit" class="btn btn-default" > terminar </button>
                           
                       <a href="adicionarpedido.php" class="btn btn-default" > cancelar </a>
@@ -541,24 +538,46 @@ header("Content-Type: text/html;charset=utf-8");
                       <div id="myModal" class="modal">
                         <!-- Modal content -->
                         <div class="modal-content" >
-                          <span class="close" >×</span>
-                          <div style="">
+                          <span class="close" id="close" >×</span>
                         <label>Referencia: </label><select id="combobox" name="combobox" ></select><br><br>
                            <label>Cantidad: </label><input type="text" id="cantidad"  onkeyup="showHint(this.value,art);calcular();" style="width:30%;" /><br>
                        <span id="txtHint" style="font-size:12px;"></span><br>
                         <label>Descuento: </label><input type="number" min="0" max="100" step="any" value="0" id="descuento" onkeyup="calcular();" style="width:30%;"/><br><br>
                         <label>Neto: </label><input type="text" id="neto" style="font-size:12px;width:30%;"  disabled/><br>
-                       <input type="text" id="netoaux" hidden/>
+                       <input type="text" id="netoaux" hidden />
                        <input type="text" id="subaux" hidden/><br>
                           <label>Iva: </label><input type="number" id="iva" style="font-size:12px;width:30%;" disabled/><br>
                       <input type="text" id="ivaux" hidden/><br>
                      <label>Total: </label><input type="number" id="total" disabled style="width:30%;"/><br><br>
                       <button type="button" id="adicionar" onclick="agregar();">Confirmar </button>
-                      </div>
                         </div>
 
                       </div>
+
+                   
+
 <!-- The Modal -->
+                        <div id="fmod" class="modal">
+
+                          <!-- Modal content -->
+                          <div class="modal-content">
+                            <span class="close" id="close2">x</span>
+
+                            <label>Referencia: </label><input id="refmod"></input><br><br>
+                           <label>Cantidad: </label><input type="text" id="cantmod" style="width:30%;" onkeyup="calcular2();" /><br>
+                           <input type="text" id="deshid" hidden/>
+                           <input type="text" id="nethid" hidden/>
+                        <label>Descuento: </label><input type="number" min="0" max="100" step="any" value="0" id="desmod" onkeyup="calcular2();" style="width:30%;"/><br><br>
+                        <label>Neto: </label><input type="text" id="netomod" style="font-size:12px;width:30%;"  disabled/><br>
+                          <label>Iva: </label><input type="number" id="ivamod" style="font-size:12px;width:30%;" disabled/><br>
+                     <label>Total: </label><input type="number" id="totalmod" disabled style="width:30%;"/><br><br>
+                      <button type="button" id="butnmod" onclick="mod();">Confirmar</button>
+
+
+                          </div>
+
+                        </div>
+                        <!-- The Modal -->
 
 
         <!-- /.row -->
@@ -609,7 +628,7 @@ var modal = document.getElementById('myModal');
 var btn = document.getElementById("myBtn");
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+var span = document.getElementById("close");
 
 // When the user clicks the button, open the modal
 btn.onclick = function() {
@@ -632,11 +651,23 @@ window.onbeforeunload = confirmExit;
   {
     return "Advertencia";
   }
+  var modal2 = document.getElementById('fmod');
+  var modindex = 0;
 var nextinput = 1;  
     function agregar(){
-      campo = '<tr id="campo'+nextinput+'" name="campo'+nextinput+'" ><th><p id="item'+nextinput+'" class="item" name="item'+nextinput+'"></p><input type="text" id="ref'+nextinput+'" name="ref'+nextinput+'" class="items" disabled></input></th><th><input type="text" id="cantidad'+nextinput+'" name="cantidad'+nextinput+'" class="items" disabled></th><th><input type="text" id="descuento'+nextinput+'" name="descuento'+nextinput+'" class="items" disabled></th><th><input type="text" id="neto'+nextinput+'" name="neto'+nextinput+'" class="items" disabled></th><th><input type="text" id="iva'+nextinput+'" name="iva'+nextinput+'" class="items" disabled></th><th><input type="text" id="total'+nextinput+'" name="total'+nextinput+'" class="items" disabled></th></tr>';
+      campo = '<tr id="campo'+nextinput+'" name="campo'+nextinput+'" ><th><input type="text" id="ref'+nextinput+'" name="ref'+nextinput+'" class="items" readonly/><button type="button" onclick="modificar('+nextinput+')">Modificar</button><button type="button" onclick="borrar('+nextinput+');">Borrar</button></th><th><input type="text" id="cantidad'+nextinput+'" name="cantidad'+nextinput+'" class="items" ></th><th><input type="text" id="descuento'+nextinput+'" name="descuento'+nextinput+'" class="items" ></th><th><input type="text" id="neto'+nextinput+'" name="neto'+nextinput+'" class="items" readonly></th><th><input type="text" id="iva'+nextinput+'" name="iva'+nextinput+'" class="items" readonly></th><th><input type="text" id="total'+nextinput+'" name="total'+nextinput+'" class="items" readonly></th></tr>';
 
       if (document.getElementById("combobox").value !== "" && document.getElementById("cantidad").value !== "" && document.getElementById("txtHint").innerHTML == "") {
+          if (nextinput>1) {
+           for (var i = 1; i < nextinput; i++) {
+           	if (document.getElementById("ref"+i)) {
+           		if (document.getElementById("combobox").value == document.getElementById("ref"+i).value) {
+	              window.alert("Este producto ya esta en el pedido");
+	              return;
+             }
+           	}
+           }
+        }
          $("#campos tbody").append(campo)
 
        // document.getElementById("item"+nextinput).innerHTML = document.getElementById("cantidad").value  + " x " +  document.getElementById("combobox").value + " $" + document.getElementById("total").value;
@@ -645,7 +676,7 @@ var nextinput = 1;
         document.getElementById("cantidad"+nextinput).value = document.getElementById("cantidad").value;
         document.getElementById("cantidad").value = "";
         document.getElementById("descuento"+nextinput).value = document.getElementById("descuento").value;
-        document.getElementById("descuento").value = "";
+        document.getElementById("descuento").value = 0;
         document.getElementById("neto"+nextinput).value = document.getElementById("neto").value;
         document.getElementById("neto").value = "";
          document.getElementById("netoaux").value = "";
@@ -656,23 +687,71 @@ var nextinput = 1;
         document.getElementById("i").value = nextinput;
         caltotal(); 
         nextinput++;
+        modal.style.display = "none";
+
 
       }else{
         window.alert("necesita un producto y una cantidad valida");
       }
 
     }
-    function borrar(){
+    function borrar(index){ 
         if (nextinput>1) {
-          nextinput--;
-          $("#campo" + nextinput ).remove();
-          caltotal();          
-        }else exit();
+          $("#campo" + index ).remove();
+          caltotal();
+        }else return; 
+    }
+    function modificar(index){
+       modal2.style.display = "block";
+          // Get the <span> element that closes the modal
+          var span = document.getElementById("close2");
+
+          // When the user clicks on <span> (x), close the modal
+          span.onclick = function() {
+              modal2.style.display = "none";
+          }
+          // When the user clicks anywhere outside of the modal, close it
+          window.onclick = function(event) {
+              if (event.target == modal2) {
+                  modal2.style.display = "none";
+              }
+          }
+          document.getElementById("refmod").value=document.getElementById("ref"+index).value;
+
+          document.getElementById("cantmod").value=document.getElementById("cantidad"+index).value;
+          document.getElementById("desmod").value=document.getElementById("descuento"+index).value;
+          document.getElementById("deshid").value=document.getElementById("descuento"+index).value;
+          document.getElementById("netomod").value=document.getElementById("neto"+index).value;
+          document.getElementById("nethid").value=document.getElementById("neto"+index).value;
+          document.getElementById("ivamod").value=document.getElementById("iva"+index).value;
+          document.getElementById("totalmod").value=document.getElementById("total"+index).value;
+          modindex = index;
+
+    }
+    function calcular2(){
+    	var aux = 0;
+    	 var neto = parseFloat(document.getElementById("nethid").value)/(1 - (parseFloat(document.getElementById("deshid").value)/100));
+    	 document.getElementById("netomod").value = neto - (neto*(parseFloat(document.getElementById("desmod").value)/100));
+    	 aux =  parseFloat(document.getElementById("netomod").value)*parseFloat(document.getElementById("cantmod").value);
+    	 document.getElementById("totalmod").value = aux + (aux*(parseFloat(document.getElementById("ivamod").value)/100));
+    }
+    function mod(){
+      document.getElementById("ref"+modindex).value = document.getElementById("refmod").value;
+      document.getElementById("cantidad"+modindex).value = document.getElementById("cantmod").value;
+      document.getElementById("descuento"+modindex).value = document.getElementById("desmod").value;
+      document.getElementById("neto"+modindex).value = document.getElementById("netomod").value;
+      document.getElementById("iva"+modindex).value = document.getElementById("ivamod").value;
+      document.getElementById("total"+modindex).value = document.getElementById("totalmod").value;
+      modal2.style.display = "none";
+      caltotal();
+
+      //poner valores del modal en la tabla
     }
     function calcular(){
+      document.getElementById("neto").value = 0;
        document.getElementById("neto").value =  document.getElementById("netoaux").value - ((document.getElementById("netoaux").value*document.getElementById("descuento").value)/100);
-       document.getElementById("ivaux").value = ((document.getElementById("neto").value*document.getElementById("cantidad").value)*document.getElementById("iva").value/100);
-       document.getElementById("subaux").value = document.getElementById("neto").value*document.getElementById("cantidad").value;
+     document.getElementById("ivaux").value = ((document.getElementById("neto").value*document.getElementById("cantidad").value)*document.getElementById("iva").value/100);
+      document.getElementById("subaux").value = document.getElementById("neto").value*document.getElementById("cantidad").value;
       document.getElementById("total").value = ((document.getElementById("neto").value*document.getElementById("cantidad").value)*document.getElementById("iva").value/100) + (document.getElementById("neto").value*document.getElementById("cantidad").value);
     }
     function caltotal(){
@@ -680,10 +759,14 @@ var nextinput = 1;
         document.getElementById("ivat").value = 0;
         document.getElementById("finalt").value = 0;
         for (var i = 1; i <= nextinput; i++) {
-          document.getElementById("subt").value = parseFloat(document.getElementById("subt").value) + ((parseFloat(document.getElementById("neto"+i).value)*document.getElementById("cantidad"+i).value));
+        	if (document.getElementById("neto"+i)) {
+        		 document.getElementById("subt").value = parseFloat(document.getElementById("subt").value) + ((parseFloat(document.getElementById("neto"+i).value)*document.getElementById("cantidad"+i).value));
           document.getElementById("ivat").value = parseFloat(document.getElementById("ivat").value) + ((parseFloat(document.getElementById("neto"+i).value)*parseFloat(document.getElementById("cantidad"+i).value)*parseFloat(document.getElementById("iva"+i).value))/100);
           document.getElementById("finalt").value = parseFloat(document.getElementById("finalt").value) + parseFloat(document.getElementById("total"+i).value);
+
+        	}
         }
+
 
     //  document.getElementById("subt").value = parseFloat(document.getElementById("subt").value)+parseFloat(document.getElementById("subaux").value);
      //   document.getElementById("ivat").value = parseFloat(document.getElementById("ivat").value)+parseFloat(document.getElementById("ivaux").value);
@@ -709,11 +792,14 @@ var nextinput = 1;
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 document.getElementById("neto").value = xmlhttp.responseText ;
                 document.getElementById("netoaux").value = xmlhttp.responseText ;
+                calcular();
+
             }
         };
         xmlhttp2.onreadystatechange = function() {
             if (xmlhttp2.readyState == 4 && xmlhttp2.status == 200) {
                 document.getElementById("iva").value = xmlhttp2.responseText;
+                calcular();
             }
         };
         xmlhttp.open("GET","getdata.php?q="+str,true);
@@ -747,5 +833,7 @@ var nextinput = 1;
           "info":     false,
            "filter": false 
         });
+        document.getElementById("campos").deleteRow(1);
+
     } );
 </script>
