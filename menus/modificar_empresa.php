@@ -81,7 +81,7 @@ header("Content-Type: text/html;charset=utf-8");
                             <a href="#"><i class="glyphicon glyphicon-cog"></i> Menu General<span class="fa arrow"></span></a>
                              <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#">Empresa</a>
+                                    <a href="modificar_empresa.php">Empresa</a>
                                 </li>
                                 <li>
                                     <a href="#">Operaciones/Usuarios</a>
@@ -182,10 +182,10 @@ header("Content-Type: text/html;charset=utf-8");
                     <div class="col-lg-12">
                       <h1 class="page-header">Modificar Datos Empresa</h1>
                     </div>
-                    <form name="form1" method="post" action="">
+                    <form name="form1" method="post" action="procempresa.php">
                         <label>Nit: </label>
                         <input  type="text" class="form-control input-sm" value="<?php echo $_SESSION['emp_nit']; ?>" style="cursor: hand;width:20%;" disabled/> 
-                        <label class=" control-label" for="vendedor" >Nombre/razonsocial? : </label>   
+                        <label class=" control-label" for="vendedor" >Razon Social: </label>   
                          <input class="form-control  input-sm" name="rz" value="<?php echo $_SESSION['emp_raz_soc']; ?>" required style="width:20%;"></input>
                          <label class=" control-label" for="vendedor" >Email: </label>   
                         <input  type="email" class="form-control input-sm" name="mail" value="<?php echo $_SESSION['emp_email']; ?>" style="cursor: hand;width:20%;" /> 

@@ -59,7 +59,19 @@ while ($row = $res1->fetch_assoc()) {
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+    <script type="text/javascript">
+    $(function() {
+    $('#form1').submit(function() {
+      if (document.getElementById("txtHint").innerHTML == "") {
+        return true;
+      }else{
+        window.alert("Debe ingresar un numero de pedido valido");
+        return false;
+       // return false to cancel form action
+      }
+    });
+});
+    </script>
 </head>
 
 
@@ -191,7 +203,7 @@ while ($row = $res1->fetch_assoc()) {
                     <div class="col-lg-12">
                       <h1 class="page-header">Adicionar Pedidos</h1>
                     </div>
-                    <form name="form1" method="post" action="adicionararticulo.php">
+                    <form name="form1" id="form1" method="post" action="adicionararticulo.php">
                          <label>Fecha : </label>
                         <input  type="text" class="form-control input-sm"   name="fecha" id="fecha" style="cursor: hand;width:20%;" required > 
                         <label class=" control-label" for="vendedor" >Vendedor : </label>   
@@ -237,6 +249,8 @@ while ($row = $res1->fetch_assoc()) {
 <InstanceEnd --></html>
 
 <script type="text/javascript">
+
+
  /*window.onbeforeunload = confirmExit;
   function confirmExit()
   {

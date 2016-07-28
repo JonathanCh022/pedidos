@@ -11,8 +11,9 @@ header("Content-Type: text/html;charset=utf-8");
 
   $sqlgeneral="UPDATE empresa SET emp_raz_soc='".$_POST['rz']."', emp_email='".$_POST['mail']."',emp_telefono='".$_POST['telefono']."' WHERE emp_nit='".$_SESSION['emp_nit']."'";
   if ($mysqli->query($sqlgeneral) === TRUE) {
+    header('Location: index.php?empresa=0');
   	
   }else{
-  	echo "Error: " . $sqlgeneral . "<br>" . $mysqli->error;
+    header('Location: index.php?empresa=1');
   }
   ?>	

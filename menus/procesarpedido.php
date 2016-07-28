@@ -20,15 +20,12 @@ header("Content-Type: text/html;charset=utf-8");
   		if ($mysqli->query($sqlarticulo) === TRUE) {
         $sqlinv = "UPDATE inventario SET inv_pedidas = (inv_pedidas + '".$_POST['cantidad'.$i]."') WHERE inv_referencia = '".$_POST['ref'.$i]."'";
         $mysqli->query($sqlinv);
-  			//header('Location: index.php?pedido='.$_POST['npedido']);
   		}else{
   			echo "problema con los articulos";
-  			echo "Error: " . $sqlarticulo . "<br>" . $mysqli->error;
   		}
  	}
-  	
+  	header('Location: index.php?pedido='.$_POST['npedido']);
   }else{
   	echo "error general";
-  	echo "Error: " . $sqlgeneral . "<br>" . $mysqli->error;
   }
   ?>	
